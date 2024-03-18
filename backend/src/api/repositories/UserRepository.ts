@@ -1,13 +1,17 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import sharp from "sharp";
+import path from "path";
 
 import { RequestError } from "../../errors";
 import UserService, { CreateUserData } from "../services/UserService";
-import { JWT_SECRET_KEY } from "../../constants";
+import { JWT_SECRET_KEY, UPLOADS_DIRECTORY } from "../../constants";
 
 // 30 days
 const JWT_EXPIRE_DATE = "30d";
 const SALT_ROUNDS = 10;
+const AVATAR_SIZE = 400;
+const AVATARS_DIRECTORY = path.join(UPLOADS_DIRECTORY, "avatars/");
 
 const hashPassword = (password: string): Promise<string> => {
   return bcrypt.hash(password, SALT_ROUNDS);
@@ -69,8 +73,33 @@ const getAuthToken = async (data: GetAuthTokenData): Promise<string> => {
   return token;
 };
 
+const updateAvatar = async (username: string, newAvatar: Express.Multer.File): Promise<void> => {
+  const user = await UserService.findOneByUsername(username);
+
+  if(!user) {
+    throw new RequestError(500);
+  }
+
+  const avatarName = user.avatar || `${user.id}.webp`;
+  const avatarPath = path.join(AVATARS_DIRECTORY, avatarName);
+
+  try {
+    await sharp(newAvatar.buffer)
+      .resize(AVATAR_SIZE, AVATAR_SIZE)
+      .toFile(avatarPath);
+  } catch (error) {
+    throw new RequestError(400, "The avatar is not a valid image");
+  }
+
+  // this code must be below because the image can be invalid
+  if(!user.avatar) {
+    await UserService.updateUserAvatar(user.id, avatarName);
+  }
+};
+
 export default {
   createUser,
   usernameExists,
   getAuthToken,
+  updateAvatar,
 };

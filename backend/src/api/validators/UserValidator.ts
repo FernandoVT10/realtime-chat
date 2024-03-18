@@ -7,6 +7,7 @@ const USERNAME_MAX_LENGTH = 25;
 
 const createUserSchema: Schema = {
   username: {
+    in: "body",
     exists: {
       options: { values: "falsy" },
       errorMessage: "Username is required",
@@ -28,6 +29,7 @@ const createUserSchema: Schema = {
     },
   },
   password: {
+    in: "body",
     exists: {
       options: { values: "falsy" },
       errorMessage: "Password is required",
@@ -37,6 +39,7 @@ const createUserSchema: Schema = {
 
 const loginSchema: Schema = {
   username: {
+    in: "body",
     exists: {
       options: { values: "falsy" },
       errorMessage: "Username is required",
@@ -49,6 +52,7 @@ const loginSchema: Schema = {
     },
   },
   password: {
+    in: "body",
     exists: {
       options: { values: "falsy" },
       errorMessage: "Password is required",
@@ -56,8 +60,26 @@ const loginSchema: Schema = {
   },
 };
 
+const updateAvatarSchema: Schema = {
+  avatar: {
+    custom: {
+      options: (_, { req }) => {
+        if(!req.file) {
+          throw new Error("Avatar is required");
+        }
+
+        if(!req.file.mimetype.startsWith("image/")) {
+          throw new Error("Avatar must be an image");
+        }
+
+        return true;
+      },
+    },
+  },
+};
 
 export default {
   createUser: [checkSchema(createUserSchema), checkValidation],
   login: [checkSchema(loginSchema), checkValidation],
+  updateAvatar: [checkSchema(updateAvatarSchema), checkValidation],
 };
