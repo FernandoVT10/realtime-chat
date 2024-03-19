@@ -1,0 +1,45 @@
+:root {
+  --color-background: #061115;
+  --color-background-alt: #000a0e;
+
+  --color-text: #cdd6da;
+
+  --color-text-dark: #000a0e;
+
+  --color-border: #2e393d;
+
+  --color-blue-light: #79aaeb;
+  --color-blue: #6791c9;
+
+  --color-red: #df5b61;
+
+  --color-green: #78b892;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+input {
+  outline: 0;
+}
+
+button {
+  cursor: pointer;
+  font: inherit;
+}
+
+a {
+  text-decoration: none;
+}

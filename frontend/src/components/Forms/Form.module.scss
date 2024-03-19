@@ -1,0 +1,137 @@
+.form {
+  position: relative;
+  background-color: var(--color-background-alt);
+  width: 100%;
+  max-width: 600px;
+  border-radius: 10px;
+  padding: 20px;
+
+  & .accountCreated {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: var(--color-green);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .8);
+
+    & .icon {
+      font-size: 50px;
+    }
+
+    & .message {
+      margin-top: 20px;
+    }
+
+    & .link {
+      margin-top: 20px;
+      font-size: 16px;
+      color: var(--color-blue);
+    }
+  }
+
+  & .inputContainer {
+    margin-top: 20px;
+
+    & .label {
+      color: var(--color-blue-light);
+      font-weight: bold;
+    }
+
+    & .input {
+      display: block;
+      padding: 10px;
+      width: 100%;
+      background-color: var(--color-background);
+      color: inherit;
+      font-size: 16px;
+      border: none;
+      margin-top: 10px;
+      border: solid 1px transparent;
+
+      &:focus {
+        border-color: var(--color-border);
+      }
+    }
+  }
+
+  & .error {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    color: var(--color-red);
+
+    & .icon {
+      margin-right: 5px;
+      font-size: 18px;
+    }
+  }
+
+  & .loader {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .5);
+
+    & .spinner {
+      display: block;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      border: solid 5px var(--color-blue);
+      border-top-color: transparent;
+      animation: 1s linear infinite rotate;
+    }
+  }
+
+  & .submitButton {
+    display: block;
+    margin-top: 20px;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background: var(--color-blue);
+    color: var(--color-text-dark);
+    font-weight: bold;
+    font-size: 14px;
+    transition: .3s;
+
+    &:hover {
+      background: var(--color-blue-light);
+    }
+  }
+
+  & .link {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--color-blue);
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    transition: .3s;
+
+    &:hover {
+      color: var(--color-blue-light);
+    }
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
