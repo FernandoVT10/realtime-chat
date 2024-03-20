@@ -83,6 +83,7 @@ function Login({ goToCreateAccount }: { goToCreateAccount: () => void }) {
         </button>
 
         <button
+          type="button"
           className={styles.link}
           onClick={goToCreateAccount}
         >
