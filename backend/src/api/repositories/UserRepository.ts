@@ -12,6 +12,7 @@ const JWT_EXPIRE_DATE = "30d";
 const SALT_ROUNDS = 10;
 const AVATAR_SIZE = 400;
 const AVATARS_DIRECTORY = path.join(UPLOADS_DIRECTORY, "avatars/");
+const AVATARS_URL = "http://localhost:3001/uploads/avatars";
 
 const hashPassword = (password: string): Promise<string> => {
   return bcrypt.hash(password, SALT_ROUNDS);
@@ -97,9 +98,36 @@ const updateAvatar = async (username: string, newAvatar: Express.Multer.File): P
   }
 };
 
+interface UserProfile {
+  username: string;
+  avatar: string;
+}
+
+const getUserProfile = async (username: string): Promise<UserProfile> => {
+  const user = await UserService.findOneByUsername(username);
+
+  if(!user) {
+    throw new RequestError(400, "The username doesn't exist");
+  }
+
+  let avatar: string;
+
+  if(user.avatar) {
+    avatar = `${AVATARS_URL}/${user.avatar}`;
+  } else {
+    avatar = `${AVATARS_URL}/default.webp`;
+  }
+
+  return {
+    username,
+    avatar,
+  };
+};
+
 export default {
   createUser,
   usernameExists,
   getAuthToken,
   updateAvatar,
+  getUserProfile,
 };

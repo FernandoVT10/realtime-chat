@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, Request } from "express";
 import asyncHandler from "express-async-handler";
 import multer from "multer";
 
@@ -40,6 +40,19 @@ const upload = multer({
   },
 });
 
+const getUsernameFromRequest = (req: Request): string => {
+  const username = req.user?.username;
+
+  if(!username) {
+    throw new Error(`
+      The username inside the "req.user" object is null or undefined.
+      Check if you have used the "authorize" middleware.
+    `);
+  }
+
+  return username;
+};
+
 router.post(
   "/user/updateAvatar",
   authorize(),
@@ -49,8 +62,7 @@ router.post(
     async (req, res) => {
       // the validator assures you that req.file exists
       const avatar = req.file as Express.Multer.File;
-      // the authorize middleware assures you username exists
-      const username = req.user?.username as string;
+      const username = getUsernameFromRequest(req);
 
       await UserRepository.updateAvatar(username, avatar);
 
@@ -60,5 +72,13 @@ router.post(
     }
   )
 );
+
+router.get("/user/profile", authorize(), asyncHandler(async (req, res) => {
+  const username = getUsernameFromRequest(req);
+
+  const data = await UserRepository.getUserProfile(username);
+
+  res.json({ data });
+}));
 
 export default router;
