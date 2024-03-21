@@ -40,17 +40,17 @@ const upload = multer({
   },
 });
 
-const getUsernameFromRequest = (req: Request): string => {
-  const username = req.user?.username;
+const getUserIdFromRequest = (req: Request): string => {
+  const userId = req.userId;
 
-  if(!username) {
+  if(!userId) {
     throw new Error(`
-      The username inside the "req.user" object is null or undefined.
+      The "req.userId" is null or undefined.
       Check if you have used the "authorize" middleware.
     `);
   }
 
-  return username;
+  return userId;
 };
 
 router.post(
@@ -62,9 +62,9 @@ router.post(
     async (req, res) => {
       // the validator assures you that req.file exists
       const avatar = req.file as Express.Multer.File;
-      const username = getUsernameFromRequest(req);
+      const userId = getUserIdFromRequest(req);
 
-      await UserRepository.updateAvatar(username, avatar);
+      await UserRepository.updateAvatar(userId, avatar);
 
       res.json({
         data: { message: "Avatar updated successfully" },
@@ -74,9 +74,9 @@ router.post(
 );
 
 router.get("/user/profile", authorize(), asyncHandler(async (req, res) => {
-  const username = getUsernameFromRequest(req);
+  const userId = getUserIdFromRequest(req);
 
-  const data = await UserRepository.getUserProfile(username);
+  const data = await UserRepository.getUserProfile(userId);
 
   res.json({ data });
 }));

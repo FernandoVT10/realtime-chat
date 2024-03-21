@@ -22,10 +22,10 @@ const passwordsMatch = (plainPassword: string, hashedPassword: string): Promise<
   return bcrypt.compare(plainPassword, hashedPassword);
 };
 
-const getJwtToken = (username: string): Promise<string> => {
+const getJwtToken = (userId: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     jwt.sign(
-      { username },
+      { userId },
       JWT_SECRET_KEY,
       { expiresIn: JWT_EXPIRE_DATE },
       (err, token) => {
@@ -69,13 +69,13 @@ const getAuthToken = async (data: GetAuthTokenData): Promise<string> => {
     throw new RequestError(400, "Username or password doesn't match");
   }
 
-  const token = getJwtToken(user.username);
+  const token = getJwtToken(user.id);
 
   return token;
 };
 
-const updateAvatar = async (username: string, newAvatar: Express.Multer.File): Promise<void> => {
-  const user = await UserService.findOneByUsername(username);
+const updateAvatar = async (userId: string, newAvatar: Express.Multer.File): Promise<void> => {
+  const user = await UserService.findOneById(userId);
 
   if(!user) {
     throw new RequestError(500);
@@ -103,8 +103,8 @@ interface UserProfile {
   avatar: string;
 }
 
-const getUserProfile = async (username: string): Promise<UserProfile> => {
-  const user = await UserService.findOneByUsername(username);
+const getUserProfile = async (userId: string): Promise<UserProfile> => {
+  const user = await UserService.findOneById(userId);
 
   if(!user) {
     throw new RequestError(400, "The username doesn't exist");
@@ -119,8 +119,8 @@ const getUserProfile = async (username: string): Promise<UserProfile> => {
   }
 
   return {
-    username,
     avatar,
+    username: user.username,
   };
 };
 

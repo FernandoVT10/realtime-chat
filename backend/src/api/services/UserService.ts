@@ -19,8 +19,13 @@ const updateUserAvatar = async (userId: string, avatar: string): Promise<boolean
   return result.modifiedCount > 0;
 };
 
+const findOneById = (id: string): Promise<User | null> => {
+  return UserModel.findOne({ _id: id });
+};
+
 export default {
   createOne,
   findOneByUsername,
-    updateUserAvatar,
+  updateUserAvatar,
+  findOneById,
 };

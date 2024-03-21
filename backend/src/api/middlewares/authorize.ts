@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { RequestHandler, Request } from "express";
 import { JsonWebTokenError, JwtPayload } from "jsonwebtoken";
 import { JWT_SECRET_KEY } from "../../constants";
+import { isValidObjectId } from "mongoose";
 
 type AuthorizeMiddleware = () => RequestHandler;
 
@@ -35,7 +36,7 @@ const authorize: AuthorizeMiddleware = () => async (req, res, next) => {
   try {
     const data = await verifyToken(token) as JwtPayload;
 
-    if(!data.username) {
+    if(!isValidObjectId(data.userId)) {
       return res.status(401).json({
         errors: [{
           message: "Invalid authentication token",
@@ -43,7 +44,7 @@ const authorize: AuthorizeMiddleware = () => async (req, res, next) => {
       });
     }
 
-    req.user = { username: data.username };
+    req.userId = data.userId;
 
     next();
   } catch (error) {
