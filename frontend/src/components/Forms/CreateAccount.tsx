@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { RiErrorWarningFill, RiCheckboxCircleLine } from "react-icons/ri";
 import { PasswordInput, UsernameInput } from "./Inputs";
-import { axiosInstance, getErrorMessage } from "./axios";
 
+import axiosInstance from "../../axios";
+import getErrorMessage from "./getErrorMessage";
 import useForm from "./useForm";
 
 import styles from "./Form.module.scss";
