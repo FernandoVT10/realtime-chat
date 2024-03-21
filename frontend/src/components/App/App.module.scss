@@ -6,3 +6,98 @@
   height: fit-content;
   padding: 40px;
 }
+
+.sideBar {
+  background: var(--color-background-alt);
+  height: 100vh;
+  width: 300px;
+
+  & .chat {
+    cursor: pointer;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    border-bottom: solid 1px var(--color-background);
+    background: transparent;
+    transition: .3s;
+
+    &:hover {
+      background: var(--color-background);
+      border-color: var(--color-border);
+    }
+
+    & .username {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+  }
+
+  & .userInfo {
+    position: absolute;
+    width: 300px;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--color-background-light);
+    padding: 10px 20px;
+
+    & .profile {
+      display: flex;
+      align-items: center;
+
+      & .details {
+        margin-left: 10px;
+
+        & .username {
+          display: block;
+          font-weight: bold;
+          color: var(--color-blue);
+        }
+
+        & .status {
+          font-size: 12px;
+          font-weight: bold;
+          color: var(--color-green);
+        }
+      }
+    }
+
+    & .settingsButton {
+      background: transparent;
+      height: 20px;
+      padding: 0;
+      border: none;
+      color: var(--color-text);
+      font-size: 20px;
+    }
+  }
+}
+
+.userAvatar {
+  position: relative;
+  & .avatar {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  & .statusDot {
+    position: absolute;
+    display: inline-block;
+    top: 25px;
+    left: 25px;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    background: var(--color-gray);
+    border: solid 3px var(--color-background);
+
+    &.online {
+      background: var(--color-green);
+    }
+  }
+}
