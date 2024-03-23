@@ -36,12 +36,12 @@ function Login({ goToCreateAccount }: { goToCreateAccount: () => void }) {
 
       saveAuthToken(res.data.data.token);
 
-      setError("");
+      window.location.reload();
     } catch (error) {
       setError(getErrorMessage(error));
-    }
 
-    setLoading(false);
+      setLoading(false);
+    }
   };
 
   return (
