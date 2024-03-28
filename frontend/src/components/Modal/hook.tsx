@@ -36,7 +36,7 @@ export default function useModal(): UseModalReturn {
       window.removeEventListener("keydown", listener);
       document.body.style.overflow = "auto";
     };
-  }, []);
+  }, [isActive]);
 
   return {
     hideModal,
