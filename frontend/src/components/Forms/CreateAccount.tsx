@@ -8,12 +8,6 @@ import useForm from "./useForm";
 
 import styles from "./Form.module.scss";
 
-interface CreateAccountResponse {
-  data: {
-    message: string;
-  }
-}
-
 function CreateAccount({ goToLogin }: { goToLogin: () => void }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,7 +22,7 @@ function CreateAccount({ goToLogin }: { goToLogin: () => void }) {
 
     try {
       const data = { username, password };
-      await axiosInstance.post<CreateAccountResponse>("/user/create", data);
+      await axiosInstance.post("/user/create", data);
 
       setAccountCreated(true);
 

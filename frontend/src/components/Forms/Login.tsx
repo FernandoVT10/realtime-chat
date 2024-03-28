@@ -9,9 +9,7 @@ import useForm from "./useForm";
 import styles from "./Form.module.scss";
 
 interface LoginResponse {
-  data: {
-    token: string;
-  }
+  token: string;
 }
 
 const saveAuthToken = (token: string): void => {
@@ -34,7 +32,7 @@ function Login({ goToCreateAccount }: { goToCreateAccount: () => void }) {
 
       const res = await axiosInstance.post<LoginResponse>("/user/login", data);
 
-      saveAuthToken(res.data.data.token);
+      saveAuthToken(res.data.token);
 
       window.location.reload();
     } catch (error) {
@@ -65,7 +63,7 @@ function Login({ goToCreateAccount }: { goToCreateAccount: () => void }) {
 
         {loading && (
           <div className={styles.loader}>
-            <span className={styles.spinner}></span>
+            <span className="spinner"></span>
           </div>
         )}
 

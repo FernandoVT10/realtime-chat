@@ -17,6 +17,11 @@
   --color-green: #78b892;
 
   --color-gray: #7A8D96;
+
+  // Toastify
+  --toastify-color-dark: var(--color-background);
+  --toastify-color-success: var(--color-blue);
+  --toastify-color-error: var(--color-red);
 }
 
 * {
@@ -45,4 +50,35 @@ button {
 
 a {
   text-decoration: none;
+}
+
+.spinner {
+  display: block;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  border: solid 5px var(--color-blue);
+  border-top-color: transparent;
+  animation: 1s linear infinite rotate;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.Toastify__toast {
+  border: solid 1px transparent;
+
+  &.Toastify__toast--success {
+    border-color: var(--color-blue);
+  }
+  &.Toastify__toast--error {
+    border-color: var(--color-red);
+  }
 }

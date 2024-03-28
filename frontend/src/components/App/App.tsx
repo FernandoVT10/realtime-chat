@@ -1,110 +1,47 @@
 import { useState, useEffect } from "react";
 import { CreateAccount, Login } from "../Forms";
-import { RiSettings5Fill } from "react-icons/ri";
 
-import styles from "./App.module.scss";
-import classNames from "classnames";
 import axiosInstance from "../../axios";
+import SideBar from "../SideBar";
+import styles from "./App.module.scss";
 
-interface UserAvatarProps {
-  avatar: string;
-  isOnline: boolean;
-}
-
-function UserAvatar({ avatar, isOnline }: UserAvatarProps) {
-  const statusDotClass = classNames(
-    { [styles.online]: isOnline },
-    styles.statusDot
-  );
-
-  return (
-    <div className={styles.userAvatar}>
-      <img
-        className={styles.avatar}
-        src={avatar}
-        alt="User's avatar"
-      />
-      <span className={statusDotClass}></span>
-    </div>
-  );
-}
-
-interface UserInfoProps {
-  avatar: string;
+type User = {
   username: string;
-}
-
-function UserInfo({ avatar, username }: UserInfoProps) {
-  return (
-    <div className={styles.userInfo}>
-      <div className={styles.profile}>
-        <UserAvatar avatar={avatar} isOnline/>
-
-        <div className={styles.details}>
-          <span className={styles.username}>{ username }</span>
-          <span className={styles.status}>Online</span>
-        </div>
-      </div>
-
-      <button
-        type="button"
-        onClick={() => console.log("Settings!")}
-        className={styles.settingsButton}
-      >
-        <RiSettings5Fill className={styles.icon}/>
-      </button>
-    </div>
-  );
-}
-
-interface SideBarProps extends UserInfoProps {}
-
-function SideBar({ avatar, username }: SideBarProps) {
-  return (
-    <div className={styles.sideBar}>
-      <div className={styles.chat}>
-        <UserAvatar avatar="avatar-2.png" isOnline />
-        <span className={styles.username}>Bocchi The Rock</span>
-      </div>
-      <div className={styles.chat}>
-        <UserAvatar avatar="avatar.jpg" isOnline={false} />
-        <span className={styles.username}>Frieren</span>
-      </div>
-
-      <UserInfo
-        avatar={avatar}
-        username={username}
-      />
-    </div>
-  );
-}
+  avatar: string;
+};
 
 function App() {
+  const [user, setUser] = useState<User | undefined>();
+  const [loading, setLoading] = useState(true);
+
   const [creatingAccount, setCreatingAccount] = useState(true);
-  const [username, setUsername] = useState("");
-  const [avatar, setAvatar] = useState("");
   
   useEffect(() => {
     const getProfile = async () => {
-      const token = window.localStorage.getItem("token");
+      try {
+        const res = await axiosInstance.get<User>("/user/profile");
 
-      const res = await axiosInstance.get("/user/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+        setUser(res.data);
+      } catch {}
 
-      const user = res.data.data;
-
-      setUsername(user.username);
-      setAvatar(user.avatar);
+      setLoading(false);
     };
 
     getProfile();
   }, []);
 
+  if(loading) {
+    return (
+      <div className={styles.loaderContainer}>
+        <span className="spinner"></span>
+        <span className={styles.text}>We are authenticating you...</span>
+      </div>
+    );
+  }
 
-  return <SideBar avatar={avatar} username={username}/>;
+  if(user) {
+    return <SideBar avatar={user.avatar} username={user.username}/>;
+  }
 
   return (
     <div>
@@ -114,7 +51,6 @@ function App() {
         ) : (
           <Login goToCreateAccount={() => setCreatingAccount(true)}/>
         )}
-
       </div>
     </div>
   );
