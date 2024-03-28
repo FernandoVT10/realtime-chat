@@ -5,6 +5,7 @@ import { RiErrorWarningFill } from "react-icons/ri";
 import axiosInstance from "../../axios";
 import getErrorMessage from "./getErrorMessage";
 import useForm from "./useForm";
+import classNames from "classnames";
 
 import styles from "./Form.module.scss";
 
@@ -76,7 +77,7 @@ function Login({ goToCreateAccount }: { goToCreateAccount: () => void }) {
 
         <button
           type="submit"
-          className={styles.submitButton}
+          className={classNames(styles.submitButton, "custom-submit-button")}
         >
           Login
         </button>

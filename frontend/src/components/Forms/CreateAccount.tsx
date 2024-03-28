@@ -5,6 +5,7 @@ import { PasswordInput, UsernameInput } from "./Inputs";
 import axiosInstance from "../../axios";
 import getErrorMessage from "./getErrorMessage";
 import useForm from "./useForm";
+import classNames from "classnames";
 
 import styles from "./Form.module.scss";
 
@@ -81,7 +82,7 @@ function CreateAccount({ goToLogin }: { goToLogin: () => void }) {
 
         <button
           type="submit"
-          className={styles.submitButton}
+          className={classNames(styles.submitButton, "custom-submit-button")}
         >
           Create Account
         </button>

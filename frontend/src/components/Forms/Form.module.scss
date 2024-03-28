@@ -84,20 +84,7 @@
   }
 
   & .submitButton {
-    display: block;
     margin-top: 20px;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    background: var(--color-blue);
-    color: var(--color-text-dark);
-    font-weight: bold;
-    font-size: 14px;
-    transition: .3s;
-
-    &:hover {
-      background: var(--color-blue-light);
-    }
   }
 
   & .link {

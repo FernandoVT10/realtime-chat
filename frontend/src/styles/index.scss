@@ -62,6 +62,22 @@ a {
   animation: 1s linear infinite rotate;
 }
 
+.custom-submit-button {
+  display: block;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background: var(--color-blue);
+  color: var(--color-text-dark);
+  font-weight: bold;
+  font-size: 14px;
+  transition: .3s;
+
+  &:hover {
+    background: var(--color-blue-light);
+  }
+}
+
 @keyframes rotate {
   0% {
     transform: rotate(0deg);

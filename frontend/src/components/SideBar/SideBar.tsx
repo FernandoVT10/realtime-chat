@@ -128,11 +128,10 @@ function UserInfo({ avatar, username }: UserInfoProps) {
                 />
               </label>
 
-              {/*TODO: Share styles with the submit button of the form*/}
               {newAvatar && (
                 <button
                   type="submit"
-                  className={styles.submitButton}
+                  className={classNames(styles.submitButton, "custom-submit-button")}
                   disabled={loading}
                 >
                   {loading ? "Updating avatar..." : "Update Avatar"}
