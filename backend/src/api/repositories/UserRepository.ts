@@ -100,7 +100,7 @@ const updateAvatar = async (userId: string, newAvatar: Express.Multer.File): Pro
 
 interface UserProfile {
   username: string;
-  avatar: string;
+  avatar?: string;
 }
 
 const getUserProfile = async (userId: string): Promise<UserProfile> => {
@@ -124,10 +124,17 @@ const getUserProfile = async (userId: string): Promise<UserProfile> => {
   };
 };
 
+const searchUsers = async (search: string): Promise<UserProfile[]> => {
+  const users = await UserService.getUsersByUsernameSearch(search);
+
+  return users;
+};
+
 export default {
   createUser,
   usernameExists,
   getAuthToken,
   updateAvatar,
   getUserProfile,
+  searchUsers,
 };

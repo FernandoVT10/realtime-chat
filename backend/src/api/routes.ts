@@ -81,4 +81,14 @@ router.get("/user/profile", authorize(), asyncHandler(async (req, res) => {
   res.json({ data });
 }));
 
+router.get("/users", ...UserValidator.users, asyncHandler(async (req, res) => {
+  const { search } = req.query;
+
+  const users = await UserRepository.searchUsers(search as string);
+
+  res.json({
+    data: { users },
+  });
+}));
+
 export default router;
