@@ -7,6 +7,8 @@ import { RequestError } from "../../errors";
 import UserService, { CreateUserData } from "../services/UserService";
 import { JWT_SECRET_KEY, UPLOADS_DIRECTORY } from "../../constants";
 
+import type { UserProfile } from "@types";
+
 // 30 days
 const JWT_EXPIRE_DATE = "30d";
 const SALT_ROUNDS = 10;
@@ -98,11 +100,6 @@ const updateAvatar = async (userId: string, newAvatar: Express.Multer.File): Pro
   }
 };
 
-interface UserProfile {
-  username: string;
-  avatar?: string;
-}
-
 const getUserProfile = async (userId: string): Promise<UserProfile> => {
   const user = await UserService.findOneById(userId);
 
@@ -119,15 +116,10 @@ const getUserProfile = async (userId: string): Promise<UserProfile> => {
   }
 
   return {
+    _id: user.id,
     avatar,
     username: user.username,
   };
-};
-
-const searchUsers = async (search: string): Promise<UserProfile[]> => {
-  const users = await UserService.getUsersByUsernameSearch(search);
-
-  return users;
 };
 
 export default {
@@ -136,5 +128,4 @@ export default {
   getAuthToken,
   updateAvatar,
   getUserProfile,
-  searchUsers,
 };

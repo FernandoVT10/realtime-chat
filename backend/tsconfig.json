@@ -7,7 +7,10 @@
     "strict": true,
     "skipLibCheck": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "paths": {
+      "@types": ["./types/types.ts"]
+    }
   },
   "include": ["./src/**/*"],
   "files": [

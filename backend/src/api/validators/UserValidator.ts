@@ -78,22 +78,8 @@ const updateAvatarSchema: Schema = {
   },
 };
 
-const usersSchema: Schema = {
-  search: {
-    in: ["query"],
-    isString: {
-      errorMessage: "Search must be a string",
-    },
-    exists: {
-      options: { values: "falsy" },
-      errorMessage: "Search is required",
-    }
-  }
-};
-
 export default {
   createUser: [checkSchema(createUserSchema), checkValidation],
   login: [checkSchema(loginSchema), checkValidation],
   updateAvatar: [checkSchema(updateAvatarSchema), checkValidation],
-  users: [checkSchema(usersSchema), checkValidation],
 };
