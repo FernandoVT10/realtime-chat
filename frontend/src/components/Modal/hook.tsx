@@ -41,6 +41,6 @@ export default function useModal(): UseModalReturn {
   return {
     hideModal,
     showModal,
-    isActive
+    isActive,
   };
 }

@@ -11,8 +11,8 @@ const usersSchema: Schema = {
     exists: {
       options: { values: "falsy" },
       errorMessage: "Search is required",
-    }
-  }
+    },
+  },
 };
 
 export default {
