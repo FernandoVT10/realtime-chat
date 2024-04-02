@@ -81,4 +81,20 @@ router.get("/profile", authorize(), asyncHandler(async (req, res) => {
   res.json({ data });
 }));
 
+router.post(
+  "/sendFriendRequest",
+  authorize(),
+  ...UserValidator.sendFriendRequest,
+  asyncHandler(async (req, res) => {
+    const userId = getUserIdFromRequest(req);
+    const { friendId } = req.body;
+
+    await UserRepository.sendFriendRequest(userId, friendId);
+
+    res.json({
+      data: { message: "Request sent successfully" },
+    });
+  })
+);
+
 export default router;

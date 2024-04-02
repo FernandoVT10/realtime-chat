@@ -1,7 +1,9 @@
 import { Schema, checkSchema } from "express-validator";
+import { isValidObjectId } from "mongoose";
 
 import UserRepository from "../repositories/UserRepository";
 import checkValidation from "../middlewares/checkValidation";
+import UserService from "../services/UserService";
 
 const USERNAME_MAX_LENGTH = 25;
 
@@ -78,8 +80,28 @@ const updateAvatarSchema: Schema = {
   },
 };
 
+const sendFriendRequestSchema: Schema = {
+  friendId: {
+    in: "body",
+    custom: {
+      options: async (friendId) => {
+        if(!isValidObjectId(friendId)) {
+          throw new Error("Invalid id");
+        }
+
+        const user = await UserService.findOneById(friendId);
+
+        if(!user) throw new Error("No user found with this id");
+
+        return true;
+      },
+    },
+  },
+};
+
 export default {
   createUser: [checkSchema(createUserSchema), checkValidation],
   login: [checkSchema(loginSchema), checkValidation],
   updateAvatar: [checkSchema(updateAvatarSchema), checkValidation],
+  sendFriendRequest: [checkSchema(sendFriendRequestSchema), checkValidation],
 };
