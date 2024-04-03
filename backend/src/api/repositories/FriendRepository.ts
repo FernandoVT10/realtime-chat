@@ -21,7 +21,23 @@ const getRequestsFromUserId = (userId: string): Promise<UserFriendRequest[]> => 
   return FriendService.findUserFriendsRequests(userId);
 };
 
+const acceptFriendRequest = async (userId: string, friendRequestId: string): Promise<boolean> => {
+  const request = await FriendService.findRequestById(friendRequestId);
+
+  // the request must be sent to the user that is accepting the request
+  if(request?.sentToUser.toString() !== userId) {
+    throw new RequestError(404, "The friend request couldn't be accepted");
+  }
+
+  await FriendService.createRelationship(
+    userId, request.requestedByUser.toString()
+  );
+
+  return await FriendService.deleteRequestById(request.id);
+};
+
 export default {
   sendFriendRequest,
   getRequestsFromUserId,
+  acceptFriendRequest,
 };

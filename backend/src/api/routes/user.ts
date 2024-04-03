@@ -108,4 +108,20 @@ router.get("/friendsRequests", authorize(), asyncHandler(async (req, res) => {
   });
 }));
 
+router.post(
+  "/acceptFriendRequest",
+  authorize(),
+  asyncHandler(async (req, res) => {
+    const userId = getUserIdFromRequest(req);
+
+    const { friendRequestId } = req.body;
+
+    await FriendRepository.acceptFriendRequest(userId, friendRequestId);
+
+    res.json({
+      data: { message: "Friend request accepted!" },
+    });
+  })
+);
+
 export default router;

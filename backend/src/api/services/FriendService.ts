@@ -1,4 +1,5 @@
 import FriendRequestModel, { FriendRequest } from "../../models/FriendRequest";
+import FriendModel from "../../models/Friend";
 
 import { UserFriendRequest, UserProfile } from "@types";
 
@@ -32,9 +33,37 @@ const findUserFriendsRequests = async (userId: string): Promise<UserFriendReques
   });
 };
 
+const findRequestById = (requestId: string): Promise<FriendRequest | null> => {
+  return FriendRequestModel.findById(requestId);
+};
+
+const deleteRequestById = async (requestId: string): Promise<boolean> => {
+  await FriendRequestModel.findByIdAndDelete(requestId);
+
+  return true;
+};
+
+const createRelationship = async (userId: string, friendId: string): Promise<boolean> => {
+  await FriendModel.create(
+    {
+      user: userId,
+      friend: friendId,
+    },
+    {
+      user: friendId,
+      friend: userId,
+    }
+  );
+
+  return true;
+};
+
 export default {
   findRequest,
   existsRequest,
   createRequest,
   findUserFriendsRequests,
+  findRequestById,
+  deleteRequestById,
+  createRelationship,
 };
