@@ -1,3 +1,4 @@
+import { UserFriendRequest } from "@types";
 import { RequestError } from "../../errors";
 import FriendService from "../services/FriendService";
 
@@ -16,6 +17,11 @@ const sendFriendRequest = async (userId: string, friendId: string): Promise<bool
   return true;
 };
 
+const getRequestsFromUserId = (userId: string): Promise<UserFriendRequest[]> => {
+  return FriendService.findUserFriendsRequests(userId);
+};
+
 export default {
   sendFriendRequest,
+  getRequestsFromUserId,
 };

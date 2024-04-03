@@ -3,3 +3,8 @@ export interface UserProfile {
   username: string;
   avatar?: string;
 }
+
+export interface UserFriendRequest {
+  _id: string;
+  user: UserProfile;
+} 

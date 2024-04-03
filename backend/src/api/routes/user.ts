@@ -98,4 +98,14 @@ router.post(
   })
 );
 
+router.get("/friendsRequests", authorize(), asyncHandler(async (req, res) => {
+  const userId = getUserIdFromRequest(req);
+
+  const requests = await FriendRepository.getRequestsFromUserId(userId);
+
+  res.json({
+    data: { requests },
+  });
+}));
+
 export default router;
