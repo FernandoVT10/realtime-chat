@@ -1,16 +1,23 @@
-import FriendModel, { Friend } from "../../models/Friend";
+import FriendRequestModel, { FriendRequest } from "../../models/FriendRequest";
 
-const searchRequest = async (userId: string, friendId: string): Promise<Friend | null> => {
-  return FriendModel.findOne({ userId, friendId });
+const findRequest = (requestedByUser: string, sentToUser: string): Promise<FriendRequest | null> => {
+  return FriendRequestModel.findOne({ requestedByUser, sentToUser });
 };
 
-const createRequest = async (userId: string, friendId: string): Promise<boolean> => {
-  await FriendModel.create({ userId, friendId });
+const existsRequest = async (requestedByUser: string, sentToUser: string): Promise<boolean> => {
+  const exists = await FriendRequestModel.exists({ requestedByUser, sentToUser });
+
+  return exists ? true : false;
+};
+
+const createRequest = async (requestedByUser: string, sentToUser: string): Promise<boolean> => {
+  await FriendRequestModel.create({ requestedByUser, sentToUser });
 
   return true;
 };
 
 export default {
-  searchRequest,
+  findRequest,
+  existsRequest,
   createRequest,
 };

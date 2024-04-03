@@ -8,10 +8,10 @@ export interface Friend extends Base {}
 
 export class Friend extends TimeStamps {
   @prop({ required: true, ref: () => User })
-  public userId!: Ref<User>;
+  public user!: Ref<User>;
 
   @prop({ required: true, ref: () => User })
-  public friendId!: Ref<User>;
+  public friend!: Ref<User>;
 }
 
 const FriendModel = getModelForClass(Friend);

@@ -6,7 +6,6 @@ import path from "path";
 import { RequestError } from "../../errors";
 import UserService, { CreateUserData } from "../services/UserService";
 import { JWT_SECRET_KEY, UPLOADS_DIRECTORY } from "../../constants";
-import FriendService from "../services/FriendService";
 
 import type { UserProfile } from "@types";
 
@@ -123,21 +122,10 @@ const getUserProfile = async (userId: string): Promise<UserProfile> => {
   };
 };
 
-const sendFriendRequest = async (userId: string, friendId: string): Promise<boolean> => {
-  const exists = await FriendService.searchRequest(userId, friendId);
-
-  if(!exists) {
-    await FriendService.createRequest(userId, friendId);
-  }
-
-  return true;
-};
-
 export default {
   createUser,
   usernameExists,
   getAuthToken,
   updateAvatar,
   getUserProfile,
-  sendFriendRequest,
 };

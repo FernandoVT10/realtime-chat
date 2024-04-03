@@ -3,6 +3,7 @@ import asyncHandler from "express-async-handler";
 import multer from "multer";
 
 import UserRepository from "../repositories/UserRepository";
+import FriendRepository from "../repositories/FriendRepository";
 import UserValidator from "../validators/UserValidator";
 import authorize from "../middlewares/authorize";
 
@@ -89,7 +90,7 @@ router.post(
     const userId = getUserIdFromRequest(req);
     const { friendId } = req.body;
 
-    await UserRepository.sendFriendRequest(userId, friendId);
+    await FriendRepository.sendFriendRequest(userId, friendId);
 
     res.json({
       data: { message: "Request sent successfully" },
