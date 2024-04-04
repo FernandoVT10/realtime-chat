@@ -1,9 +1,9 @@
-import { Router, Request } from "express";
+import { Router } from "express";
+import { getUserIdFromRequest } from "../utils";
 import asyncHandler from "express-async-handler";
 import multer from "multer";
 
 import UserRepository from "../repositories/UserRepository";
-import FriendRepository from "../repositories/FriendRepository";
 import UserValidator from "../validators/UserValidator";
 import authorize from "../middlewares/authorize";
 
@@ -41,19 +41,6 @@ const upload = multer({
   },
 });
 
-const getUserIdFromRequest = (req: Request): string => {
-  const userId = req.userId;
-
-  if(!userId) {
-    throw new Error(`
-      The "req.userId" is null or undefined.
-      Check if you have used the "authorize" middleware.
-    `);
-  }
-
-  return userId;
-};
-
 router.post(
   "/updateAvatar",
   authorize(),
@@ -81,48 +68,5 @@ router.get("/profile", authorize(), asyncHandler(async (req, res) => {
 
   res.json({ data });
 }));
-
-router.post(
-  "/sendFriendRequest",
-  authorize(),
-  ...UserValidator.sendFriendRequest,
-  asyncHandler(async (req, res) => {
-    const userId = getUserIdFromRequest(req);
-    const { friendId } = req.body;
-
-    await FriendRepository.sendFriendRequest(userId, friendId);
-
-    res.json({
-      data: { message: "Request sent successfully" },
-    });
-  })
-);
-
-router.get("/friendsRequests", authorize(), asyncHandler(async (req, res) => {
-  const userId = getUserIdFromRequest(req);
-
-  const requests = await FriendRepository.getFriendsRequests(userId);
-
-  res.json({
-    data: { requests },
-  });
-}));
-
-router.post(
-  "/acceptFriendRequest",
-  authorize(),
-  ...UserValidator.acceptFriendRequest,
-  asyncHandler(async (req, res) => {
-    const userId = getUserIdFromRequest(req);
-
-    const { friendRequestId } = req.body;
-
-    await FriendRepository.acceptFriendRequest(userId, friendRequestId);
-
-    res.json({
-      data: { message: "Friend request accepted!" },
-    });
-  })
-);
 
 export default router;
