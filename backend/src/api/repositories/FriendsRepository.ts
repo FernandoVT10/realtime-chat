@@ -1,4 +1,4 @@
-import { UserFriendRequest } from "@types";
+import { UserFriendRequest, UserProfile } from "@types";
 import { RequestError } from "../../errors";
 import FriendsService from "../services/FriendsService";
 
@@ -38,8 +38,12 @@ const acceptRequest = async (userId: string, friendRequestId: string): Promise<b
   return await FriendsService.deleteRequestById(request.id);
 };
 
+const getFriends = (userId: string): Promise<UserProfile[]> => 
+  FriendsService.findFriends(userId);
+
 export default {
   sendRequest,
   getFriendsRequests,
   acceptRequest,
+  getFriends,
 };

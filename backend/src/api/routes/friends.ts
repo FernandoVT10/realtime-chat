@@ -51,4 +51,14 @@ router.post(
   })
 );
 
+router.get("/", authorize(), asyncHandler(async (req, res) => {
+  const userId = getUserIdFromRequest(req);
+
+  const friends = await FriendsRepository.getFriends(userId);
+
+  res.json({
+    data: { friends },
+  });
+}));
+
 export default router;

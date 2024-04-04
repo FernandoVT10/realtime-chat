@@ -59,6 +59,20 @@ const createFriendship = async (userId: string, friendId: string): Promise<boole
   return true;
 };
 
+const findFriends = async (userId: string): Promise<UserProfile[]> => {
+  const friendsDocs = await FriendModel
+    .find({ user: userId })
+    .select("friend")
+    .populate({
+      path: "friend",
+      select: ["_id", "avatar", "username"],
+    });
+
+  return friendsDocs.map(friendDoc => {
+    return friendDoc.friend as unknown as UserProfile;
+  });
+};
+
 export default {
   existsRequest,
   createRequest,
@@ -67,4 +81,5 @@ export default {
   deleteRequestById,
   existsFriendship,
   createFriendship,
+  findFriends,
 };
