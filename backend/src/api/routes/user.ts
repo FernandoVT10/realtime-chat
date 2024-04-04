@@ -101,7 +101,7 @@ router.post(
 router.get("/friendsRequests", authorize(), asyncHandler(async (req, res) => {
   const userId = getUserIdFromRequest(req);
 
-  const requests = await FriendRepository.getRequestsFromUserId(userId);
+  const requests = await FriendRepository.getFriendsRequests(userId);
 
   res.json({
     data: { requests },
@@ -111,6 +111,7 @@ router.get("/friendsRequests", authorize(), asyncHandler(async (req, res) => {
 router.post(
   "/acceptFriendRequest",
   authorize(),
+  ...UserValidator.acceptFriendRequest,
   asyncHandler(async (req, res) => {
     const userId = getUserIdFromRequest(req);
 
