@@ -9,7 +9,10 @@ const createOne = (data: CreateUserData): Promise<User> => {
   return UserModel.create(data);
 };
 
-const findOneByUsername = (username: string): Promise<User | null> => {
+const findOneByUsername = (username: string, includePassword = false): Promise<User | null> => {
+  if(includePassword) {
+    return UserModel.findOne({ username }).select("+password").exec();
+  }
   return UserModel.findOne({ username });
 };
 

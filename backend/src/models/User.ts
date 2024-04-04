@@ -9,7 +9,7 @@ export class User extends TimeStamps {
   @prop({ required: true })
   public username!: string;
 
-  @prop({ required: true })
+  @prop({ required: true, select: false })
   public password!: string;
 
   @prop()

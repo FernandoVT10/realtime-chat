@@ -61,7 +61,7 @@ interface GetAuthTokenData {
 }
 
 const getAuthToken = async (data: GetAuthTokenData): Promise<string> => {
-  const user = await UserService.findOneByUsername(data.username);
+  const user = await UserService.findOneByUsername(data.username, true);
 
   if(!user) throw new RequestError(400, "Username doesn't exist");
 
