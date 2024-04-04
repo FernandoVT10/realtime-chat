@@ -1,17 +1,13 @@
 import { useState, useEffect } from "react";
 import { CreateAccount, Login } from "../Forms";
+import { UserProfile } from "shared/types";
 
 import axiosInstance from "../../axios";
 import SideBar from "../SideBar";
 import styles from "./App.module.scss";
 
-type User = {
-  username: string;
-  avatar: string;
-};
-
 function App() {
-  const [user, setUser] = useState<User | undefined>();
+  const [user, setUser] = useState<UserProfile | undefined>();
   const [loading, setLoading] = useState(true);
 
   const [creatingAccount, setCreatingAccount] = useState(true);
@@ -19,7 +15,7 @@ function App() {
   useEffect(() => {
     const getProfile = async () => {
       try {
-        const res = await axiosInstance.get<User>("/user/profile");
+        const res = await axiosInstance.get<UserProfile>("/user/profile");
 
         setUser(res.data);
       } catch {}
@@ -40,7 +36,8 @@ function App() {
   }
 
   if(user) {
-    return <SideBar avatar={user.avatar} username={user.username}/>;
+    // TODO: fix this as string thingy
+    return <SideBar avatar={user.avatar as string} username={user.username}/>;
   }
 
   return (

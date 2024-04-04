@@ -1,4 +1,4 @@
-import { UserFriendRequest, UserProfile } from "@types";
+import type { UserFriendRequest, UserProfile } from "shared/types";
 import { RequestError } from "../../errors";
 import FriendsService from "../services/FriendsService";
 

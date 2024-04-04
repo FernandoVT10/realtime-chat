@@ -7,7 +7,7 @@ import { RequestError } from "../../errors";
 import UserService, { CreateUserData } from "../services/UserService";
 import { JWT_SECRET_KEY, UPLOADS_DIRECTORY } from "../../constants";
 
-import type { UserProfile } from "@types";
+import type { UserProfile } from "shared/types";
 
 // 30 days
 const JWT_EXPIRE_DATE = "30d";

@@ -1,7 +1,7 @@
 import FriendRequestModel, { FriendRequest } from "../../models/FriendRequest";
 import FriendModel from "../../models/Friend";
 
-import { UserFriendRequest, UserProfile } from "@types";
+import type { UserFriendRequest, UserProfile } from "shared/types";
 
 const existsRequest = async (requestedByUser: string, sentToUser: string): Promise<boolean> => {
   const exists = await FriendRequestModel.exists({ requestedByUser, sentToUser });

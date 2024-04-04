@@ -1,5 +1,5 @@
 import UserModel from "../../models/User";
-import type { UserProfile } from "@types";
+import type { UserProfile } from "shared/types";
 
 const USERS_LIMIT = 10;
 

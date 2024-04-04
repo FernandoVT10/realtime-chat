@@ -7,4 +7,4 @@ export interface UserProfile {
 export interface UserFriendRequest {
   _id: string;
   user: UserProfile;
-} 
+}

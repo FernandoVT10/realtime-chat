@@ -1,6 +1,6 @@
 import styles from "./Form.module.scss";
 
-const USERNAME_MAX_LENGTH = 25;
+import { USER_CONFIG } from "shared/constants";
 
 interface UsernameInputProps {
   autoComplete: HTMLInputElement["autocomplete"];
@@ -29,7 +29,7 @@ export function UsernameInput({
         id="username-input"
         type="text"
         name="username"
-        maxLength={USERNAME_MAX_LENGTH}
+        maxLength={USER_CONFIG.usernameMaxLength}
         placeholder={placeholder}
         value={username}
         onChange={handleChange}

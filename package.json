@@ -18,7 +18,8 @@
   },
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "shared"
   ],
   "dependencies": {
     "react-toastify": "^10.0.5"

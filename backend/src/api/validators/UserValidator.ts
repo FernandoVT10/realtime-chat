@@ -1,9 +1,9 @@
 import { Schema, checkSchema } from "express-validator";
 
+import { USER_CONFIG } from "shared/constants";
+
 import UserRepository from "../repositories/UserRepository";
 import checkValidation from "../middlewares/checkValidation";
-
-const USERNAME_MAX_LENGTH = 25;
 
 const createUserSchema: Schema = {
   username: {
@@ -14,7 +14,7 @@ const createUserSchema: Schema = {
       bail: true,
     },
     isLength: {
-      options: { max: USERNAME_MAX_LENGTH },
+      options: { max: USER_CONFIG.usernameMaxLength },
       errorMessage: "Username max length is 25",
       bail: true,
     },
@@ -46,7 +46,7 @@ const loginSchema: Schema = {
       bail: true,
     },
     isLength: {
-      options: { max: USERNAME_MAX_LENGTH },
+      options: { max: USER_CONFIG.usernameMaxLength },
       errorMessage: "Username max length is 25",
       bail: true,
     },
