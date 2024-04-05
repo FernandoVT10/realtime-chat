@@ -37,7 +37,7 @@ const createUserSchema: Schema = {
     isLength: {
       options: { max: USER_CONFIG.passwordMaxLength },
       errorMessage: `Password max length is ${USER_CONFIG.passwordMaxLength}`,
-    }
+    },
   },
 };
 
@@ -64,7 +64,7 @@ const loginSchema: Schema = {
     isLength: {
       options: { max: USER_CONFIG.passwordMaxLength },
       errorMessage: `Password max length is ${USER_CONFIG.passwordMaxLength}`,
-    }
+    },
   },
 };
 
