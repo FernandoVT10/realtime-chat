@@ -22,8 +22,18 @@ const updateUserAvatar = async (userId: string, avatar: string): Promise<boolean
   return result.modifiedCount > 0;
 };
 
-const findOneById = (id: string): Promise<User | null> => {
-  return UserModel.findOne({ _id: id });
+interface FindOneByIdOptions {
+  disableGetters?: boolean;
+}
+
+const findOneById = async (id: string, options?: FindOneByIdOptions): Promise<User | null> => {
+  const user = await UserModel.findOne({ _id: id });
+
+  if(options?.disableGetters) {
+    return user?.toObject({ getters: false }) as User | null;
+  }
+
+  return user;
 };
 
 export default {

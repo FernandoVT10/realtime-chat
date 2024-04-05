@@ -14,7 +14,6 @@ const JWT_EXPIRE_DATE = "30d";
 const SALT_ROUNDS = 10;
 const AVATAR_SIZE = 400;
 const AVATARS_DIRECTORY = path.join(UPLOADS_DIRECTORY, "avatars/");
-const AVATARS_URL = "http://localhost:3001/uploads/avatars";
 
 const hashPassword = (password: string): Promise<string> => {
   return bcrypt.hash(password, SALT_ROUNDS);
@@ -71,19 +70,21 @@ const getAuthToken = async (data: GetAuthTokenData): Promise<string> => {
     throw new RequestError(400, "Username or password doesn't match");
   }
 
-  const token = getJwtToken(user.id);
+  const token = getJwtToken(user._id.toString());
 
   return token;
 };
 
 const updateAvatar = async (userId: string, newAvatar: Express.Multer.File): Promise<void> => {
-  const user = await UserService.findOneById(userId);
+  const user = await UserService.findOneById(userId, {
+    disableGetters: true,
+  });
 
   if(!user) {
     throw new RequestError(500);
   }
 
-  const avatarName = user.avatar || `${user.id}.webp`;
+  const avatarName = user.avatar || `${user._id.toString()}.webp`;
   const avatarPath = path.join(AVATARS_DIRECTORY, avatarName);
 
   try {
@@ -96,7 +97,7 @@ const updateAvatar = async (userId: string, newAvatar: Express.Multer.File): Pro
 
   // this code must be below because the image can be invalid
   if(!user.avatar) {
-    await UserService.updateUserAvatar(user.id, avatarName);
+    await UserService.updateUserAvatar(user._id.toString(), avatarName);
   }
 };
 
@@ -107,17 +108,9 @@ const getUserProfile = async (userId: string): Promise<UserProfile> => {
     throw new RequestError(400, "The username doesn't exist");
   }
 
-  let avatar: string;
-
-  if(user.avatar) {
-    avatar = `${AVATARS_URL}/${user.avatar}`;
-  } else {
-    avatar = `${AVATARS_URL}/default.webp`;
-  }
-
   return {
-    _id: user.id,
-    avatar,
+    _id: user._id.toString(),
+    avatar: user.avatar as string,
     username: user.username,
   };
 };
