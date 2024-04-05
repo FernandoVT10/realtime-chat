@@ -15,7 +15,7 @@ const createUserSchema: Schema = {
     },
     isLength: {
       options: { max: USER_CONFIG.usernameMaxLength },
-      errorMessage: "Username max length is 25",
+      errorMessage: `Username max length is ${USER_CONFIG.usernameMaxLength}`,
       bail: true,
     },
     custom: {
@@ -34,6 +34,10 @@ const createUserSchema: Schema = {
       options: { values: "falsy" },
       errorMessage: "Password is required",
     },
+    isLength: {
+      options: { max: USER_CONFIG.passwordMaxLength },
+      errorMessage: `Password max length is ${USER_CONFIG.passwordMaxLength}`,
+    }
   },
 };
 
@@ -57,6 +61,10 @@ const loginSchema: Schema = {
       options: { values: "falsy" },
       errorMessage: "Password is required",
     },
+    isLength: {
+      options: { max: USER_CONFIG.passwordMaxLength },
+      errorMessage: `Password max length is ${USER_CONFIG.passwordMaxLength}`,
+    }
   },
 };
 

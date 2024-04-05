@@ -67,6 +67,7 @@ export function PasswordInput({
         id="password-input"
         type="password"
         name="password"
+        maxLength={USER_CONFIG.passwordMaxLength}
         placeholder={placeholder}
         value={password}
         onChange={handleChange}
