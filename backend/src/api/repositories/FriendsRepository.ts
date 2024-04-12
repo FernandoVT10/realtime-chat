@@ -4,7 +4,7 @@ import FriendsService from "../services/FriendsService";
 
 const sendRequest = async (userId: string, friendId: string): Promise<boolean> => {
   if(userId === friendId)
-    throw new RequestError(404, "You can't send a friend request to yourself");
+    throw new RequestError(400, "You can't send a friend request to yourself");
 
   let exists = await FriendsService.existsRequest(userId, friendId);
   if(exists) throw new RequestError(400, "You have sent a friend request to this user already");
