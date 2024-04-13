@@ -1,0 +1,90 @@
+.addFriendModal {
+  & .searchForm {
+    display: flex;
+
+    & .input {
+      padding: 10px;
+      width: 100%;
+      margin-right: 10px;
+      background-color: var(--color-background-light);
+      color: inherit;
+      font-size: 16px;
+      border: solid 1px transparent;
+
+      &:focus {
+        border-color: var(--color-blue);
+      }
+    }
+
+    & .button {
+      padding: 0 15px;
+    }
+  }
+
+  & .error {
+    margin-top: 20px;
+    color: var(--color-red);
+    padding: 0 20px;
+  }
+
+  & .notFound {
+    margin-top: 20px;
+    text-align: center;
+    color: var(--color-blue);
+    font-weight: bold;
+  }
+  
+  & .loader {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  & .users {
+    & .user {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+
+      & .userInfo {
+        display: flex;
+        overflow: hidden;
+        align-items: center;
+
+        & .username {
+          display: block;
+          margin-left: 10px;
+          margin-right: 10px;
+          overflow: hidden;
+          word-wrap: break-word;
+        }
+      }
+
+      & .requestSent {
+        color: var(--color-green);
+      }
+
+      & .requestFailed {
+        color: var(--color-red);
+      }
+
+      & .button {
+        height: fit-content;
+        width: 130px;
+        display: flex;
+        justify-content: center;
+
+        & .icon { display: none; }
+      }
+    }
+  }
+
+  @media screen and (max-width: 520px) {
+    & .users .user .button {
+      width: fit-content;
+      & .icon { display: block; }
+      & .text { display: none; }
+    }
+  }
+}

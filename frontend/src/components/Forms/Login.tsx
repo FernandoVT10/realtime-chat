@@ -3,7 +3,7 @@ import { PasswordInput, UsernameInput } from "./Inputs";
 import { RiErrorWarningFill } from "react-icons/ri";
 
 import axiosInstance from "../../axios";
-import getErrorMessage from "./getErrorMessage";
+import getFirstErrorMessage from "../../utils/getFirstErrorMessage";
 import useForm from "./useForm";
 import classNames from "classnames";
 
@@ -37,7 +37,7 @@ function Login({ goToCreateAccount }: { goToCreateAccount: () => void }) {
 
       window.location.reload();
     } catch (error) {
-      setError(getErrorMessage(error));
+      setError(getFirstErrorMessage(error));
 
       setLoading(false);
     }

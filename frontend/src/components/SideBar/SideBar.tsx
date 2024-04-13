@@ -1,35 +1,15 @@
 import Modal, { useModal } from "../Modal";
 import { RiSettings5Fill } from "react-icons/ri";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { UserProfile } from "shared/types";
 
+import UserAvatar from "./UserAvatar";
+import AddFriendModal from "./AddFriendModal";
 import classNames from "classnames";
 import axiosInstance from "../../axios";
 
 import styles from "./SideBar.module.scss";
-
-interface UserAvatarProps {
-  avatar: string;
-  isOnline: boolean;
-}
-
-function UserAvatar({ avatar, isOnline }: UserAvatarProps) {
-  const statusDotClass = classNames(
-    { [styles.online]: isOnline },
-    styles.statusDot
-  );
-
-  return (
-    <div className={styles.userAvatar}>
-      <img
-        className={styles.avatar}
-        src={avatar}
-        alt="User's avatar"
-      />
-      <span className={statusDotClass}></span>
-    </div>
-  );
-}
 
 const readImageAsDataURL = (file: File): Promise<string> => {
   if(!file.type.startsWith("image/")) {
@@ -143,7 +123,7 @@ function UserInfo({ avatar, username }: UserInfoProps) {
       </Modal>
 
       <div className={styles.profile}>
-        <UserAvatar avatar={avatar} isOnline/>
+        <UserAvatar avatar={avatar} status={{ isOnline: true }}/>
 
         <div className={styles.details}>
           <span className={styles.username}>{ username }</span>
@@ -165,15 +145,49 @@ function UserInfo({ avatar, username }: UserInfoProps) {
 interface SideBarProps extends UserInfoProps {}
 
 function SideBar({ avatar, username }: SideBarProps) {
+  const [friends, setFriends] = useState<UserProfile[]>([]);
+  const addFriendModal = useModal();
+
+  useEffect(() => {
+    const getFriends = async () => {
+      try {
+        const res = await axiosInstance.get<{ friends: UserProfile[] }>("/friends");
+
+        setFriends(res.data.friends);
+      } catch (error) {
+        // TODO: handle this error correctly
+        console.error(error);
+      }
+    };
+
+    getFriends();
+  }, []);
+
   return (
     <div className={styles.sideBar}>
-      <div className={styles.chat}>
-        <UserAvatar avatar="avatar-2.png" isOnline />
-        <span className={styles.username}>Bocchi The Rock</span>
+      <AddFriendModal modal={addFriendModal}/>
+
+      <div>
+        <button type="button">
+          Pending friend requests
+        </button>
+
+        <button type="button" onClick={addFriendModal.showModal}>
+          Add a new friend
+        </button>
       </div>
-      <div className={styles.chat}>
-        <UserAvatar avatar="avatar.jpg" isOnline={false} />
-        <span className={styles.username}>Frieren</span>
+      
+      <h3 className={styles.subtitle}>Friends</h3>
+
+      <div className={styles.friends}>
+        {friends.map(friend => {
+          return (
+            <div className={styles.friend} key={friend._id}>
+              <UserAvatar avatar={friend.avatar} status={{ isOnline: true }} />
+              <span className={styles.username}>{friend.username}</span>
+            </div>
+          );
+        })}
       </div>
 
       <UserInfo

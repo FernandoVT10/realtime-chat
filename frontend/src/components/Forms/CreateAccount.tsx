@@ -3,7 +3,7 @@ import { RiErrorWarningFill, RiCheckboxCircleLine } from "react-icons/ri";
 import { PasswordInput, UsernameInput } from "./Inputs";
 
 import axiosInstance from "../../axios";
-import getErrorMessage from "./getErrorMessage";
+import getFirstErrorMessage from "../../utils/getFirstErrorMessage";
 import useForm from "./useForm";
 import classNames from "classnames";
 
@@ -29,7 +29,7 @@ function CreateAccount({ goToLogin }: { goToLogin: () => void }) {
 
       setError("");
     } catch (error) {
-      setError(getErrorMessage(error));
+      setError(getFirstErrorMessage(error));
     }
 
     setLoading(false);
@@ -69,7 +69,7 @@ function CreateAccount({ goToLogin }: { goToLogin: () => void }) {
 
         {loading && (
           <div className={styles.loader}>
-            <span className={styles.spinner}></span>
+            <span className="spinner"></span>
           </div>
         )}
 

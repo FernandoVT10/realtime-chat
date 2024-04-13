@@ -7,7 +7,7 @@ type BadRequestError = {
   message: string;
 };
 
-const getErrorMessage = (error: unknown): string => {
+const getFirstErrorMessage = (error: unknown): string => {
   if(error instanceof AxiosError) {
     if(error.response?.status === 400 && error.response.data) {
       const errors: BadRequestError[] | undefined = error.response.data.errors;
@@ -21,4 +21,4 @@ const getErrorMessage = (error: unknown): string => {
   return INTERNAL_SERVER_ERROR;
 };
 
-export default getErrorMessage;
+export default getFirstErrorMessage;
