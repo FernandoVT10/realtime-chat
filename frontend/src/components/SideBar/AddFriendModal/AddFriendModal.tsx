@@ -122,6 +122,7 @@ function Users({ users, loadingUsers, usersNotFound, error }: UsersProps) {
         <User
           user={user}
           sendFriendRequest={sendFriendRequest}
+          key={user._id}
         />
       ))}
     </div>
