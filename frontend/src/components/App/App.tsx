@@ -37,7 +37,7 @@ function App() {
   }
 
   if(user) {
-    return <SideBar avatar={user.avatar} username={user.username}/>;
+    return <SideBar user={user}/>;
   }
 
   return (
