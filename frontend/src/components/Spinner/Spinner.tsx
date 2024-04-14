@@ -1,5 +1,7 @@
 import classNames from "classnames";
 
+import styles from "./Spinner.module.scss";
+
 interface SpinnerProps {
   size: number;
   className?: string;
@@ -12,7 +14,7 @@ function Spinner({ size, className }: SpinnerProps) {
     borderWidth: `${size / 10}px`,
   };
 
-  const spinnerClass = classNames(className, "spinner");
+  const spinnerClass = classNames(className, styles.spinner);
 
   return (
     <span className={spinnerClass} style={style}></span>

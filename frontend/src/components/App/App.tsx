@@ -4,6 +4,7 @@ import { UserProfile } from "shared/types";
 
 import axiosInstance from "../../axios";
 import SideBar from "../SideBar";
+import Spinner from "../Spinner";
 import styles from "./App.module.scss";
 
 function App() {
@@ -29,7 +30,7 @@ function App() {
   if(loading) {
     return (
       <div className={styles.loaderContainer}>
-        <span className="spinner"></span>
+        <Spinner size={50}/>
         <span className={styles.text}>We are authenticating you...</span>
       </div>
     );

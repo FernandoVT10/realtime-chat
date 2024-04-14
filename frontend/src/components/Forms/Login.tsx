@@ -6,6 +6,7 @@ import axiosInstance from "../../axios";
 import getFirstErrorMessage from "../../utils/getFirstErrorMessage";
 import useForm from "./useForm";
 import classNames from "classnames";
+import Spinner from "../Spinner";
 
 import styles from "./Form.module.scss";
 
@@ -64,7 +65,7 @@ function Login({ goToCreateAccount }: { goToCreateAccount: () => void }) {
 
         {loading && (
           <div className={styles.loader}>
-            <span className="spinner"></span>
+            <Spinner size={50}/>
           </div>
         )}
 

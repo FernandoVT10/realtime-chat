@@ -52,16 +52,6 @@ a {
   text-decoration: none;
 }
 
-.spinner {
-  display: block;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  border: solid 5px var(--color-blue);
-  border-top-color: transparent;
-  animation: 1s linear infinite rotate;
-}
-
 .custom-submit-button {
   display: block;
   border: none;
@@ -75,16 +65,6 @@ a {
 
   &:hover {
     background: var(--color-blue-light);
-  }
-}
-
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
   }
 }
 
