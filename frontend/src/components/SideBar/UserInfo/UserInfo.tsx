@@ -1,5 +1,5 @@
 import Modal, { useModal, UseModalReturn } from "../../Modal";
-import { RiSettings5Fill } from "react-icons/ri";
+import { IconSettings } from "@tabler/icons-react";
 import { toast } from "react-toastify";
 import { useState } from "react";
 
@@ -154,7 +154,7 @@ function UserInfo({ avatar: initialAvatar, username }: UserInfoProps) {
         onClick={updateAvatarModal.showModal}
         className={styles.settingsButton}
       >
-        <RiSettings5Fill className={styles.icon}/>
+        <IconSettings size={22}/>
       </button>
     </div>
   );

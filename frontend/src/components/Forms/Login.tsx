@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { PasswordInput, UsernameInput } from "./Inputs";
-import { RiErrorWarningFill } from "react-icons/ri";
+import { IconAlertCircleFilled } from "@tabler/icons-react";
 
 import axiosInstance from "../../axios";
 import getFirstErrorMessage from "../../utils/getFirstErrorMessage";
@@ -71,7 +71,7 @@ function Login({ goToCreateAccount }: { goToCreateAccount: () => void }) {
 
         {error.length > 0 && (
           <p className={styles.error}>
-            <RiErrorWarningFill className={styles.icon}/>
+            <IconAlertCircleFilled size={20} className={styles.icon}/>
             { error }
           </p>
         )}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { RiErrorWarningFill, RiCheckboxCircleLine } from "react-icons/ri";
+import { IconAlertCircleFilled, IconCircleCheck } from "@tabler/icons-react";
 import { PasswordInput, UsernameInput } from "./Inputs";
 
 import axiosInstance from "../../axios";
@@ -43,7 +43,7 @@ function CreateAccount({ goToLogin }: { goToLogin: () => void }) {
 
         {accountCreated && (
           <div className={styles.accountCreated}>
-            <RiCheckboxCircleLine className={styles.icon}/>
+            <IconCircleCheck size={50}/>
             <h3 className={styles.message}>Account created successfully!</h3>
             <button
               className={styles.link}
@@ -76,7 +76,7 @@ function CreateAccount({ goToLogin }: { goToLogin: () => void }) {
 
         {error.length > 0 && (
           <p className={styles.error}>
-            <RiErrorWarningFill className={styles.icon}/>
+            <IconAlertCircleFilled size={20} className={styles.icon}/>
             { error }
           </p>
         )}

@@ -3,7 +3,7 @@ import Modal, { UseModalReturn } from "../../Modal";
 import { UserProfile } from "shared/types";
 import { USER_CONFIG } from "shared/constants";
 import { toast } from "react-toastify";
-import { FiSearch, FiUserPlus } from "react-icons/fi";
+import { IconSearch, IconUserPlus } from "@tabler/icons-react";
 
 import classNames from "classnames";
 import UserAvatar from "../UserAvatar";
@@ -57,7 +57,7 @@ function User({ user, sendFriendRequest }: UserProps) {
         onClick={handleSendRequest}
       >
         <span className={styles.text}>Add Friend</span>
-        <FiUserPlus size={18} className={styles.icon}/>
+        <IconUserPlus size={18} className={styles.icon}/>
       </button>
     );
   };
@@ -177,7 +177,7 @@ function AddFriendModal({ modal }: { modal: UseModalReturn }) {
               type="submit"
               className={classNames("custom-submit-button", styles.button)}
             >
-              <FiSearch size={16}/>
+              <IconSearch size={18}/>
             </button>
           </div>
         </form>

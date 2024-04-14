@@ -1,5 +1,5 @@
 import { UseModalReturn } from "./hook";
-import { FaTimes } from "react-icons/fa";
+import { IconX } from "@tabler/icons-react";
 
 import styles from "./Modal.module.scss";
 
@@ -23,7 +23,7 @@ export default function Modal({ title, modal, children }: ModalProps) {
               className={styles.closeButton}
               onClick={() => modal.hideModal()}
             >
-              <FaTimes size={20}/>
+              <IconX size={20}/>
             </button>
           </div>
 
