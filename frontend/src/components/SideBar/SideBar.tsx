@@ -5,6 +5,7 @@ import { UserProfile } from "shared/types";
 import UserAvatar from "./UserAvatar";
 import AddFriendModal from "./AddFriendModal";
 import UserInfo from "./UserInfo";
+import PendingRequests from "./PendingRequests";
 import axiosInstance from "../../axios";
 
 import styles from "./SideBar.module.scss";
@@ -16,6 +17,7 @@ interface SideBarProps {
 function SideBar({ user }: SideBarProps) {
   const [friends, setFriends] = useState<UserProfile[]>([]);
   const addFriendModal = useModal();
+  const pendingRequestsModal = useModal();
 
   useEffect(() => {
     const getFriends = async () => {
@@ -35,9 +37,10 @@ function SideBar({ user }: SideBarProps) {
   return (
     <div className={styles.sideBar}>
       <AddFriendModal modal={addFriendModal}/>
+      <PendingRequests modal={pendingRequestsModal}/>
 
       <div>
-        <button type="button">
+        <button type="button" onClick={pendingRequestsModal.showModal}>
           Pending friend requests
         </button>
 

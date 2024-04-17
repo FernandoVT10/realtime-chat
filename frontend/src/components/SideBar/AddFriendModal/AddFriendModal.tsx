@@ -11,6 +11,7 @@ import axiosInstance from "../../../axios";
 import getFirstErrorMessage from "../../../utils/getFirstErrorMessage";
 import Spinner from "../../Spinner";
 
+// TODO: use ../shared.module.scss
 import styles from "./AddFriendModal.module.scss";
 
 interface UserProps {
@@ -63,7 +64,7 @@ function User({ user, sendFriendRequest }: UserProps) {
   };
 
   return (
-    <div className={styles.user} key={user._id}>
+    <div className={styles.user}>
       <div className={styles.userInfo}>
         <UserAvatar avatar={user.avatar}/>
         <span className={styles.username}>{user.username}</span>

@@ -1,0 +1,59 @@
+.container {
+  & .loader {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  & .error {
+    margin-top: 20px;
+    color: var(--color-red);
+    padding: 0 20px;
+  }
+
+  & .noData {
+    margin-top: 20px;
+    text-align: center;
+    color: var(--color-blue);
+    font-weight: bold;
+  }
+
+  & .users {
+    & .user {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+
+      & .userInfo {
+        display: flex;
+        overflow: hidden;
+        align-items: center;
+
+        & .username {
+          display: block;
+          margin-left: 10px;
+          margin-right: 10px;
+          overflow: hidden;
+          word-wrap: break-word;
+        }
+      }
+
+      // & .requestSent {
+      //   color: var(--color-green);
+      // }
+      //
+      & .errorIcon {
+        color: var(--color-red);
+      }
+
+      & .button {
+        height: fit-content;
+        display: flex;
+        justify-content: center;
+
+        & .icon { display: none; }
+      }
+    }
+  }
+}
