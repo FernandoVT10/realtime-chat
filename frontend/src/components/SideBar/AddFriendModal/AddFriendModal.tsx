@@ -3,7 +3,12 @@ import Modal, { UseModalReturn } from "../../Modal";
 import { UserProfile } from "shared/types";
 import { USER_CONFIG } from "shared/constants";
 import { toast } from "react-toastify";
-import { IconSearch, IconUserPlus } from "@tabler/icons-react";
+import {
+  IconSearch,
+  IconUserPlus,
+  IconAlertCircleFilled,
+  IconCircleCheckFilled
+} from "@tabler/icons-react";
 
 import classNames from "classnames";
 import UserAvatar from "../UserAvatar";
@@ -11,7 +16,7 @@ import axiosInstance from "../../../axios";
 import getFirstErrorMessage from "../../../utils/getFirstErrorMessage";
 import Spinner from "../../Spinner";
 
-// TODO: use ../shared.module.scss
+import sharedStyles from "../shared.module.scss";
 import styles from "./AddFriendModal.module.scss";
 
 interface UserProps {
@@ -37,37 +42,33 @@ function User({ user, sendFriendRequest }: UserProps) {
   const getButton = () => {
     if(requestStatus === "sent") {
       return (
-        <span className={styles.requestSent}>Request sent</span>
+        <IconCircleCheckFilled className={sharedStyles.successIcon} size={25}/>
       );
     } else if(requestStatus === "failed") {
       return (
-        <span className={styles.requestFailed}>Request failed</span>
+        <IconAlertCircleFilled className={sharedStyles.errorIcon} size={25}/>
       );
     }
 
-    if(sendingRequest) {
-      return (
-        <Spinner size={20}/>
-      );
-    }
+    if(sendingRequest) return <Spinner size={20}/>;
 
     return (
       <button
         type="button"
-        className={classNames(styles.button, "custom-submit-button")}
+        className={classNames(sharedStyles.button, "custom-submit-button")}
         onClick={handleSendRequest}
       >
-        <span className={styles.text}>Add Friend</span>
-        <IconUserPlus size={18} className={styles.icon}/>
+        <span className={sharedStyles.text}>Add Friend</span>
+        <IconUserPlus size={18} className={sharedStyles.icon}/>
       </button>
     );
   };
 
   return (
-    <div className={styles.user}>
-      <div className={styles.userInfo}>
+    <div className={sharedStyles.user}>
+      <div className={sharedStyles.userInfo}>
         <UserAvatar avatar={user.avatar}/>
-        <span className={styles.username}>{user.username}</span>
+        <span className={sharedStyles.username}>{user.username}</span>
       </div>
 
       {getButton()}
@@ -95,7 +96,7 @@ function Users({ users, loadingUsers, usersNotFound, error }: UsersProps) {
 
   if(loadingUsers) {
     return (
-      <div className={styles.loader}>
+      <div className={sharedStyles.loader}>
         <Spinner size={30}/>
       </div>
     );
@@ -103,7 +104,7 @@ function Users({ users, loadingUsers, usersNotFound, error }: UsersProps) {
 
   if(error) {
     return (
-      <div className={styles.error}>
+      <div className={sharedStyles.error}>
         { error }
       </div>
     );
@@ -111,14 +112,14 @@ function Users({ users, loadingUsers, usersNotFound, error }: UsersProps) {
 
   if(usersNotFound) {
     return (
-      <div className={styles.notFound}>
+      <div className={sharedStyles.noData}>
         <p>Not users found</p>
       </div>
     );
   }
 
   return (
-    <div className={styles.users}>
+    <div className={sharedStyles.users}>
       {users.map(user => (
         <User
           user={user}
@@ -161,8 +162,7 @@ function AddFriendModal({ modal }: { modal: UseModalReturn }) {
 
   return (
     <Modal modal={modal} title="Add a Friend!">
-      <div className={styles.addFriendModal}>
-
+      <div className={classNames(styles.addFriendModal, sharedStyles.container)}>
         <form onSubmit={handleSearch}>
           <div className={styles.searchForm}>
             <input

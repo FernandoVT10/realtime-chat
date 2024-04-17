@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { UserFriendRequest } from "shared/types";
 import Modal, { UseModalReturn } from "../../Modal";
 import { toast } from "react-toastify";
-import { IconAlertCircleFilled } from "@tabler/icons-react";
+import { IconAlertCircleFilled, IconCheck } from "@tabler/icons-react";
 
 import Spinner from "../../Spinner";
 import UserAvatar from "../UserAvatar";
@@ -48,7 +48,9 @@ function Request({ request, acceptRequest }: RequestProps) {
         className={classNames(sharedStyles.button, "custom-submit-button")}
         onClick={handleAcceptRequest}
       >
-        {"Accept Request"}
+
+        <span className={sharedStyles.text}>Accept Request</span>
+        <IconCheck size={18} className={sharedStyles.icon}/>
       </button>
     );
   };

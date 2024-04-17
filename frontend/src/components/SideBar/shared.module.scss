@@ -39,10 +39,10 @@
         }
       }
 
-      // & .requestSent {
-      //   color: var(--color-green);
-      // }
-      //
+      & .successIcon {
+        color: var(--color-green);
+      }
+
       & .errorIcon {
         color: var(--color-red);
       }
@@ -54,6 +54,14 @@
 
         & .icon { display: none; }
       }
+    }
+  }
+
+  @media screen and (max-width: 520px) {
+    & .users .user .button {
+      width: fit-content;
+      & .icon { display: block; }
+      & .text { display: none; }
     }
   }
 }
