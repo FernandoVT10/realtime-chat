@@ -3,10 +3,34 @@
   height: 100vh;
   width: 300px;
 
+  & .buttonsContainer {
+    padding: 10px;
+
+    & .button {
+      width: 100%;
+      margin-top: 10px;
+
+      &:nth-child(1) { margin: 0; }
+    }
+  }
+  
   & .subtitle {
     margin-top: 20px;
     margin-left: 20px;
     font-size: 14px;
+  }
+
+  & .statusContainer {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+
+    & .errorMessage, & .infoMessage {
+      font-weight: bold;
+    }
+
+    & .errorMessage { color: var(--color-red); }
+    & .infoMessage { color: var(--color-blue); }
   }
 
   & .friends {
