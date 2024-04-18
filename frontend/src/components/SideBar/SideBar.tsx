@@ -25,20 +25,20 @@ function SideBar({ user }: SideBarProps) {
   const addFriendModal = useModal();
   const pendingRequestsModal = useModal();
 
+  const fetchFriends = async () => {
+    try {
+      const res = await axiosInstance.get<{ friends: UserProfile[] }>("/friends");
+
+      setFriends(res.data.friends);
+    } catch (error) {
+      setError(getFirstErrorMessage(error));
+    }
+
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const getFriends = async () => {
-      try {
-        const res = await axiosInstance.get<{ friends: UserProfile[] }>("/friends");
-
-        setFriends(res.data.friends);
-      } catch (error) {
-        setError(getFirstErrorMessage(error));
-      }
-
-      setLoading(false);
-    };
-
-    getFriends();
+    fetchFriends();
   }, []);
 
   const getFriendsComponent = () => {
@@ -88,7 +88,7 @@ function SideBar({ user }: SideBarProps) {
   return (
     <div className={styles.sideBar}>
       <AddFriendModal modal={addFriendModal}/>
-      <PendingRequests modal={pendingRequestsModal}/>
+      <PendingRequests modal={pendingRequestsModal} reFetchFriends={fetchFriends}/>
 
       <div className={styles.buttonsContainer}>
         <button

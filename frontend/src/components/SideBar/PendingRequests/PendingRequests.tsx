@@ -12,9 +12,12 @@ import classNames from "classnames";
 
 import sharedStyles from "../shared.module.scss";
 
+type RemoveRequestFn = (requestId: string) => void;
+type AcceptRequestFn = (requestId: string, username: string) => Promise<boolean>;
+
 interface RequestProps {
   request: UserFriendRequest;
-  acceptRequest: (requestId: string) => Promise<boolean>;
+  acceptRequest: AcceptRequestFn;
 }
 
 function Request({ request, acceptRequest }: RequestProps) {
@@ -23,8 +26,12 @@ function Request({ request, acceptRequest }: RequestProps) {
 
   const handleAcceptRequest = async () => {
     setLoading(true);
-    const res = await acceptRequest(request._id);
-    setRequestFailed(!res);
+
+    const { username } = request.user;
+    const success = await acceptRequest(request._id, username);
+
+    setRequestFailed(!success);
+
     setLoading(false);
   };
 
@@ -73,12 +80,20 @@ interface UsersProps {
   loading: boolean;
   error: string;
   requests: UserFriendRequest[];
+  removeRequest: RemoveRequestFn;
+  reFetchFriends: () => Promise<void>;
 }
 
-function Requests({ loading, error, requests }: UsersProps) {
-  const acceptRequest = async (requestId: string): Promise<boolean> => {
+function Requests({ loading, error, requests, removeRequest, reFetchFriends }: UsersProps) {
+  const acceptRequest: AcceptRequestFn = async (requestId, username) => {
     try {
       await axiosInstance.post("/friends/acceptRequest", { friendRequestId: requestId });
+
+      removeRequest(requestId);
+      toast.success(`Now ${username} is your friend!`);
+
+      await reFetchFriends();
+
       return true;
     } catch (error) {
       toast.error(getFirstErrorMessage(error));
@@ -125,13 +140,20 @@ function Requests({ loading, error, requests }: UsersProps) {
 
 interface PendingRequestsProps {
   modal: UseModalReturn;
+  reFetchFriends: () => Promise<void>;
 }
 
-function PendingRequests({ modal }: PendingRequestsProps) {
+function PendingRequests({ modal, reFetchFriends }: PendingRequestsProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [requests, setRequests] = useState<UserFriendRequest[]>([]);
   const [fetchedRequests, setFetchedRequests] = useState(false);
+
+  const removeRequest: RemoveRequestFn = (requestId) => {
+    setRequests(
+      requests.filter(request => request._id !== requestId)
+    );
+  };
 
   useEffect(() => {
     if(fetchedRequests || !modal.isActive) return;
@@ -159,7 +181,9 @@ function PendingRequests({ modal }: PendingRequestsProps) {
         <Requests
           loading={loading}
           requests={requests}
+          removeRequest={removeRequest}
           error={error}
+          reFetchFriends={reFetchFriends}
         />
       </div>
     </Modal>
