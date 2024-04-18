@@ -73,7 +73,7 @@ function Request({ request, acceptRequest }: RequestProps) {
 
       {getButton()}
     </div>
-  )
+  );
 }
 
 interface UsersProps {

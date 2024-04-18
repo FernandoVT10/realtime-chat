@@ -73,7 +73,7 @@ function User({ user, sendFriendRequest }: UserProps) {
 
       {getButton()}
     </div>
-  )
+  );
 }
 
 interface UsersProps {

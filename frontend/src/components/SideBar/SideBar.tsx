@@ -6,7 +6,7 @@ import UserAvatar from "./UserAvatar";
 import AddFriendModal from "./AddFriendModal";
 import UserInfo from "./UserInfo";
 import PendingRequests from "./PendingRequests";
-import Spinner from "../Spinner"
+import Spinner from "../Spinner";
 import axiosInstance from "../../axios";
 import getFirstErrorMessage from "../../utils/getFirstErrorMessage";
 import classNames from "classnames";
