@@ -1,5 +1,6 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
+import { initSocketServer } from "./socketServer";
 
 import mongoose from "mongoose";
 import app from "./api/app";
@@ -19,9 +20,7 @@ async function main() {
   await mongoose.connect(MONGOOSE_URI);
   console.log("Connected to MongoDB successfully");
 
-  ioServer.on("connection", (_socket) => {
-    console.log("Socket.io connection");
-  });
+  initSocketServer(ioServer);
 
   httpServer.listen(3001, () => {
     console.log("Server running at http://localhost:3001");
