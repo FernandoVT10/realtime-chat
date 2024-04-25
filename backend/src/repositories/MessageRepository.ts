@@ -1,7 +1,7 @@
 import { Message } from "shared/types";
 import { RequestError } from "../errors";
 import { ValidationError } from "joi";
-import { sendMessageSchema } from "../validationSchemas";
+import { sendMessageSchema, getMessagesSchema } from "../validationSchemas";
 
 import MessageService from "../services/MessageService";
 import FriendsService from "../api/services/FriendsService";
@@ -14,15 +14,9 @@ const getFirstErrorMessage = (error: unknown) => {
   return "Internal server error";
 };
 
-const createMessage = async (userId: string, friendId: string, message: string): Promise<Message> => {
-  try {
-    await sendMessageSchema.validateAsync({ message, friendId }, { abortEarly: true });
-  } catch (error) {
-    throw new RequestError(400, getFirstErrorMessage(error));
-  }
-
+const validateUsersIds = async (userId: string, friendId: string): Promise<boolean> => {
   if(userId == friendId) {
-    throw new RequestError(400, "You can't send a message to yourself");
+    throw new RequestError(400, `UserId "${userId}" and FriendId: "${friendId} cannot be the same`);
   }
 
   const isMyFriend = await FriendsService.existsFriendship(userId, friendId);
@@ -31,10 +25,35 @@ const createMessage = async (userId: string, friendId: string, message: string):
     throw new RequestError(400, `The user with the id "${friendId}" must be your friend`);
   }
 
+  return true;
+};
+
+const createMessage = async (userId: string, friendId: string, message: string): Promise<Message> => {
+  try {
+    await sendMessageSchema.validateAsync({ message, friendId }, { abortEarly: true });
+  } catch (error) {
+    throw new RequestError(400, getFirstErrorMessage(error));
+  }
+
+  await validateUsersIds(userId, friendId);
+
   const createdMessage = await MessageService.createOne(message, userId, friendId);
   return createdMessage;
 };
 
+const getMesssages = async (userId: string, friendId: string): Promise<Message[]> => {
+  try {
+    await getMessagesSchema.validateAsync({ friendId }, { abortEarly: true });
+  } catch (error) {
+    throw new RequestError(400, getFirstErrorMessage(error));
+  }
+
+  await validateUsersIds(userId, friendId);
+
+  return MessageService.getAll(userId, friendId);
+};
+
 export default {
   createMessage,
+  getMesssages,
 };

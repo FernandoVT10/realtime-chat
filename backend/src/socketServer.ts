@@ -21,6 +21,23 @@ const authorizeMiddleware = async (socket: Socket, next: SocketNextFn) => {
   }
 };
 
+const handleError = (error: unknown, cb: (data: unknown) => void): void => {
+  if(error instanceof RequestError) {
+    cb({
+      status: error.statusCode,
+      error: error.message,
+    });
+  } else {
+    cb({
+      status: 500,
+      error: "Internal Server Error",
+    });
+
+    // TODO: implement a better logger
+    console.error("There was an error trying to create a message:", error);
+  }
+};
+
 export const initSocketServer = (ioServer: Server) => {
   ioServer.use(authorizeMiddleware);
 
@@ -38,20 +55,16 @@ export const initSocketServer = (ioServer: Server) => {
 
         cb({ status: 200 });
       } catch (error) {
-        if(error instanceof RequestError) {
-          cb({
-            status: error.statusCode,
-            error: error.message,
-          });
-        } else {
-          cb({
-            status: 500,
-            error: "Internal Server Error",
-          });
+        handleError(error, cb);
+      }
+    });
 
-          // TODO: implement a better logger
-          console.error("There was an error trying to create a message:", error);
-        }
+    socket.on("get-messages", async (friendId, cb) => {
+      try {
+        const messages = await MessageRepository.getMesssages(userId, friendId);
+        cb(messages);
+      } catch (error) {
+        handleError(error, cb);
       }
     });
   });
