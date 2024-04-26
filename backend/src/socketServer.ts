@@ -53,7 +53,7 @@ export const initSocketServer = (ioServer: Server) => {
 
         socket.to(friendId).emit("new-message", createdMessage);
 
-        cb({ status: 200 });
+        cb({ status: 200, createdMessage });
       } catch (error) {
         handleError(error, cb);
       }
