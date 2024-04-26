@@ -17,7 +17,7 @@ const getAll = async (userId: string, friendId: string): Promise<Message[]> => {
     .limit(MAX_NUM_MESSAGES)
     .lean();
 
-  return messages as unknown as Message[];
+  return messages.reverse() as unknown as Message[];
 };
 
 export default {
