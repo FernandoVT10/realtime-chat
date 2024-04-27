@@ -15,9 +15,10 @@ import styles from "./SideBar.module.scss";
 
 interface SideBarProps {
   user: UserProfile;
+  selectFriend: (friend: UserProfile) => void;
 }
 
-function SideBar({ user }: SideBarProps) {
+function SideBar({ user, selectFriend }: SideBarProps) {
   const [friends, setFriends] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -73,8 +74,13 @@ function SideBar({ user }: SideBarProps) {
 
         <div className={styles.friends}>
           {friends.map(friend => {
+            // TODO: Add feedback when a friend is selected 
             return (
-              <div className={styles.friend} key={friend._id}>
+              <div
+                className={styles.friend}
+                onClick={() => selectFriend(friend)}
+                key={friend._id}
+              >
                 <UserAvatar avatar={friend.avatar} status={{ isOnline: true }} />
                 <span className={styles.username}>{friend.username}</span>
               </div>

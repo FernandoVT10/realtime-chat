@@ -1,4 +1,5 @@
 import axios from "axios";
+import getAuthToken from "./utils/getAuthToken";
 
 const API_URL = "http://localhost:3001/api";
 
@@ -9,7 +10,7 @@ interface Headers {
 const getHeaders = (): Partial<Headers> => {
   const headers: Partial<Headers> = {};
 
-  const token = window.localStorage.getItem("token");
+  const token = getAuthToken();
   if(token) {
     headers.Authorization = `Bearer ${token}`;
   }

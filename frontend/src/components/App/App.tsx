@@ -5,15 +5,19 @@ import { UserProfile } from "shared/types";
 import axiosInstance from "../../axios";
 import SideBar from "../SideBar";
 import Spinner from "../Spinner";
+import Chat from "../Chat";
+
 import styles from "./App.module.scss";
 
 function App() {
   const [user, setUser] = useState<UserProfile | undefined>();
   const [loading, setLoading] = useState(true);
+  const [selectedFriend, setSelectedFriend] = useState<UserProfile>();
 
   const [creatingAccount, setCreatingAccount] = useState(true);
   
   useEffect(() => {
+
     const getProfile = async () => {
       try {
         const res = await axiosInstance.get<UserProfile>("/user/profile");
@@ -37,7 +41,12 @@ function App() {
   }
 
   if(user) {
-    return <SideBar user={user}/>;
+    return (
+      <div className={styles.appContainer}>
+        <SideBar user={user} selectFriend={setSelectedFriend}/>
+        <Chat selectedFriend={selectedFriend} user={user}/>
+      </div>
+    );
   }
 
   return (

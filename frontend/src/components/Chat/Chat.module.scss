@@ -1,0 +1,102 @@
+.chat {
+  position: relative;
+  width: calc(100% - 300px);
+  height: 100%;
+  padding: 0 20px;
+
+  & .messagesContainer {
+    width: 100%;
+    height: calc(100vh - 98px);
+    padding: 20px 0;
+    overflow-y: auto;
+
+    & .messageContainer {
+      width: 100%;
+      margin-top: 20px;
+
+      &:nth-child(1) {
+        margin: 0;
+      }
+
+      &.isFriendMessage {
+        & .author .username {
+          color: var(--color-text);
+          font-weight: normal;
+        }
+      }
+
+      & .author {
+        display: flex;
+        align-items: center;
+
+        & .username {
+          margin-left: 10px;
+          color: var(--color-highlighted-text);
+          font-weight: bold;
+        }
+      }
+
+      & .messages .message {
+        background: var(--color-background-light);
+        width: fit-content;
+        padding: 10px;
+        max-width: 500px;
+        border-radius: 10px;
+        margin-left: 40px;
+        margin-top: 10px;
+
+        &:nth-child(1) {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+
+  & .sendMessageForm {
+    width: 100%;
+    position: relative;
+    left: 0;
+    bottom: 0;
+    padding: 20px;
+
+    &.loading:after {
+      content: "";
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    & .input {
+      width: 100%;
+      padding: 20px;
+      font-size: 16px;
+      border: none;
+      background: var(--color-background-light);
+      color: var(--color-text);
+    }
+
+    & .button {
+      position: absolute;
+      background: transparent;
+      color: var(--color-text);
+      border: none;
+      right: 30px;
+      top: 37px;
+      transition: .3s;
+
+      &:hover {
+        color: var(--color-highlighted-text);
+      }
+    }
+
+    & .loader {
+      z-index: 2;
+      position: absolute;
+      right: 40px;
+      top: 40px;
+    }
+  }
+}
