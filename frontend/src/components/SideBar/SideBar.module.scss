@@ -50,6 +50,11 @@
         border-color: var(--color-border);
       }
 
+      &.selected {
+        background: var(--color-background-light);
+        border-color: var(--color-highlighted-border);
+      }
+
       & .username {
         display: block;
         font-size: 14px;

@@ -43,7 +43,11 @@ function App() {
   if(user) {
     return (
       <div className={styles.appContainer}>
-        <SideBar user={user} selectFriend={setSelectedFriend}/>
+        <SideBar
+          user={user}
+          selectedFriend={selectedFriend}
+          setSelectedFriend={setSelectedFriend}
+        />
         <Chat selectedFriend={selectedFriend} user={user}/>
       </div>
     );

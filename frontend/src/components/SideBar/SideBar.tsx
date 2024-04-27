@@ -15,10 +15,11 @@ import styles from "./SideBar.module.scss";
 
 interface SideBarProps {
   user: UserProfile;
-  selectFriend: (friend: UserProfile) => void;
+  selectedFriend: UserProfile | undefined;
+  setSelectedFriend: (friend: UserProfile) => void;
 }
 
-function SideBar({ user, selectFriend }: SideBarProps) {
+function SideBar({ user, selectedFriend, setSelectedFriend }: SideBarProps) {
   const [friends, setFriends] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -60,7 +61,6 @@ function SideBar({ user, selectFriend }: SideBarProps) {
     }
 
     if(!friends.length) {
-      // TODO: Add a SVG instead
       return (
         <div className={styles.statusContainer}>
           <span className={styles.infoMessage}>You don't have friends :(</span>
@@ -74,11 +74,14 @@ function SideBar({ user, selectFriend }: SideBarProps) {
 
         <div className={styles.friends}>
           {friends.map(friend => {
-            // TODO: Add feedback when a friend is selected 
+            const classFriend = classNames(styles.friend, {
+              [styles.selected]: selectedFriend?._id === friend._id,
+            });
+
             return (
               <div
-                className={styles.friend}
-                onClick={() => selectFriend(friend)}
+                className={classFriend}
+                onClick={() => setSelectedFriend(friend)}
                 key={friend._id}
               >
                 <UserAvatar avatar={friend.avatar} status={{ isOnline: true }} />
