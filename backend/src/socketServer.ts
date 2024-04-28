@@ -48,6 +48,8 @@ export const initSocketServer = (ioServer: Server) => {
     console.log("User connected with ID:", socket.data.userId);
 
     socket.on("send-message", async (message, friendId, cb) => {
+      if(typeof cb !== "function") return;
+
       try {
         const createdMessage = await MessageRepository.createMessage(userId, friendId, message);
 
