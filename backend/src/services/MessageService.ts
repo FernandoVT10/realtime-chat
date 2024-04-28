@@ -20,7 +20,28 @@ const getAll = async (userId: string, friendId: string): Promise<Message[]> => {
   return messages.reverse() as unknown as Message[];
 };
 
+const markMessagesAsRead = async (userId: string, friendId: string): Promise<void> => {
+  await MessageModel.updateMany(
+    {
+      createdBy: [userId, friendId],
+      sentTo: [userId, friendId],
+      hasBeenRead: false,
+    },
+    { $set: { hasBeenRead: true } },
+  );
+};
+
+const markMessageAsRead = async (messageId: string): Promise<boolean> => {
+  const res = await MessageModel.updateOne(
+    { _id: messageId, hasBeenRead: false },
+    { $set: { hasBeenRead: true } },
+  );
+  return res.modifiedCount > 0;
+};
+
 export default {
   createOne,
   getAll,
+  markMessagesAsRead,
+  markMessageAsRead,
 };

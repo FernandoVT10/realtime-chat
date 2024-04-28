@@ -38,9 +38,10 @@
 
     & .friend {
       cursor: pointer;
-      padding: 10px 20px;
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
       border-bottom: solid 1px var(--color-background);
       background: transparent;
       transition: .3s;
@@ -55,11 +56,29 @@
         border-color: var(--color-highlighted-border);
       }
 
-      & .username {
-        display: block;
-        font-size: 14px;
+      & .profile {
+        display: flex;
+        align-items: center;
+
+        & .username {
+          display: block;
+          font-size: 14px;
+          font-weight: bold;
+          margin-left: 10px;
+        }
+      }
+
+      & .pendingMessages {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 25px;
+        height: 25px;
+        font-size: 12px;
         font-weight: bold;
-        margin-left: 10px;
+        border-radius: 50%;
+        background: var(--color-blue);
+        color: var(--color-text-dark);
       }
     }
   }

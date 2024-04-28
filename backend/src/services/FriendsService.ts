@@ -1,5 +1,8 @@
+import { HydratedDocument } from "mongoose";
+import { User } from "../models/User";
 import FriendRequestModel, { FriendRequest } from "../models/FriendRequest";
 import FriendModel from "../models/Friend";
+import MessageModel from "../models/Message";
 
 import type { UserFriendRequest, UserProfile } from "shared/types";
 
@@ -69,7 +72,16 @@ const findFriends = async (userId: string): Promise<UserProfile[]> => {
     });
 
   return friendsDocs.map(friendDoc => {
-    return friendDoc.friend as unknown as UserProfile;
+    return (friendDoc.friend as HydratedDocument<User>)
+      .toObject({ getters: true }) as UserProfile;
+  });
+}
+
+const countPendingMessages = (userId: string, friendId: string): Promise<number> => {
+  return MessageModel.countDocuments({
+    createdBy: [userId, friendId],
+    sentTo: [userId, friendId],
+    hasBeenRead: false,
   });
 };
 
@@ -82,4 +94,5 @@ export default {
   existsFriendship,
   createFriendship,
   findFriends,
+  countPendingMessages,
 };

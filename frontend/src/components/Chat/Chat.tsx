@@ -130,9 +130,10 @@ function Chat({ selectedFriend, user }: ChatProps) {
   }, []);
 
   useEffect(() => {
-    const listener = (createdMessage: MessageType) => {
+    const listener = (createdMessage: MessageType, cb: (data: unknown) => void) => {
       if(createdMessage.createdBy === selectedFriend?._id) {
         addMessage(createdMessage);
+        cb({ read: true });
       }
     };
 

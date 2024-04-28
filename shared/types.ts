@@ -4,6 +4,10 @@ export interface UserProfile {
   avatar: string;
 }
 
+export interface FriendProfile extends UserProfile {
+  pendingMessagesCount: number;
+}
+
 export interface UserFriendRequest {
   _id: string;
   user: UserProfile;

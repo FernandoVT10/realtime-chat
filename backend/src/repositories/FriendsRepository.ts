@@ -1,4 +1,4 @@
-import type { UserFriendRequest, UserProfile } from "shared/types";
+import type { UserFriendRequest, FriendProfile } from "shared/types";
 import { RequestError } from "../errors";
 import FriendsService from "../services/FriendsService";
 
@@ -38,8 +38,19 @@ const acceptRequest = async (userId: string, friendRequestId: string): Promise<b
   return await FriendsService.deleteRequestById(request.id);
 };
 
-const getFriends = (userId: string): Promise<UserProfile[]> => 
-  FriendsService.findFriends(userId);
+const getFriends = async (userId: string): Promise<FriendProfile[]> => {
+  const users = await FriendsService.findFriends(userId);
+
+  const friends: FriendProfile[] = [];
+
+  for(const user of users) {
+    const count = await FriendsService.countPendingMessages(userId, user._id);
+
+    friends.push({ ...user, pendingMessagesCount: count });
+  }
+
+  return friends;
+}
 
 export default {
   sendRequest,

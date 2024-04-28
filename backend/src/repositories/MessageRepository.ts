@@ -50,10 +50,18 @@ const getMesssages = async (userId: string, friendId: string): Promise<Message[]
 
   await validateUsersIds(userId, friendId);
 
-  return MessageService.getAll(userId, friendId);
+  const messages = await MessageService.getAll(userId, friendId);
+
+  await MessageService.markMessagesAsRead(userId, friendId);
+
+  return messages;
 };
+
+const markMessageAsRead = (messageId: string): Promise<boolean> =>
+  MessageService.markMessageAsRead(messageId);
 
 export default {
   createMessage,
   getMesssages,
+  markMessageAsRead,
 };

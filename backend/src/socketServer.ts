@@ -53,7 +53,18 @@ export const initSocketServer = (ioServer: Server) => {
       try {
         const createdMessage = await MessageRepository.createMessage(userId, friendId, message);
 
-        socket.to(friendId).emit("new-message", createdMessage);
+
+        try {
+          // only one user should be in the "friendId" room
+          const responses = await socket
+            .to(friendId)
+            .timeout(100)
+            .emitWithAck("new-message", createdMessage);
+
+          if(responses.length > 0 && responses[0].read) {
+            await MessageRepository.markMessageAsRead(createdMessage._id);
+          } 
+        } catch {}
 
         cb({ status: 200, createdMessage });
       } catch (error) {

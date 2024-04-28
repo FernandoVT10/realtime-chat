@@ -1,6 +1,6 @@
 import { useModal } from "../Modal";
 import { useState, useEffect } from "react";
-import { UserProfile } from "shared/types";
+import { UserProfile, FriendProfile } from "shared/types";
 
 import UserAvatar from "./UserAvatar";
 import AddFriendModal from "./AddFriendModal";
@@ -20,7 +20,7 @@ interface SideBarProps {
 }
 
 function SideBar({ user, selectedFriend, setSelectedFriend }: SideBarProps) {
-  const [friends, setFriends] = useState<UserProfile[]>([]);
+  const [friends, setFriends] = useState<FriendProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -29,7 +29,7 @@ function SideBar({ user, selectedFriend, setSelectedFriend }: SideBarProps) {
 
   const fetchFriends = async () => {
     try {
-      const res = await axiosInstance.get<{ friends: UserProfile[] }>("/friends");
+      const res = await axiosInstance.get<{ friends: FriendProfile[] }>("/friends");
 
       setFriends(res.data.friends);
     } catch (error) {
@@ -37,6 +37,17 @@ function SideBar({ user, selectedFriend, setSelectedFriend }: SideBarProps) {
     }
 
     setLoading(false);
+  };
+
+  const handleSelectFriend = (friend: FriendProfile) => {
+    setFriends(friends.map(f => {
+      // mark messages as read
+      if(f._id === friend._id) f.pendingMessagesCount = 0;
+
+      return f;
+    }));
+
+    setSelectedFriend(friend);
   };
 
   useEffect(() => {
@@ -81,11 +92,16 @@ function SideBar({ user, selectedFriend, setSelectedFriend }: SideBarProps) {
             return (
               <div
                 className={classFriend}
-                onClick={() => setSelectedFriend(friend)}
+                onClick={() => handleSelectFriend(friend)}
                 key={friend._id}
               >
-                <UserAvatar avatar={friend.avatar} status={{ isOnline: true }} />
-                <span className={styles.username}>{friend.username}</span>
+                <div className={styles.profile}>
+                  <UserAvatar avatar={friend.avatar} status={{ isOnline: true }} />
+                  <span className={styles.username}>{friend.username}</span>
+                </div>
+                {friend.pendingMessagesCount > 0 && (
+                  <span className={styles.pendingMessages}>{friend.pendingMessagesCount}</span>
+                )}
               </div>
             );
           })}
