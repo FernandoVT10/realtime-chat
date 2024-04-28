@@ -2,7 +2,7 @@ import { Schema, checkSchema } from "express-validator";
 
 import { USER_CONFIG } from "shared/constants";
 
-import UserRepository from "../repositories/UserRepository";
+import UserRepository from "../../repositories/UserRepository";
 import checkValidation from "../middlewares/checkValidation";
 
 const createUserSchema: Schema = {

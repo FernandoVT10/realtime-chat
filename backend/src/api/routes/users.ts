@@ -3,7 +3,7 @@ import { getUserIdFromRequest } from "../utils";
 
 import asyncHandler from "express-async-handler";
 import authorize from "../middlewares/authorize";
-import UsersRepository from "../repositories/UsersRepository";
+import UsersRepository from "../../repositories/UsersRepository";
 import UsersValidator from "../validators/UsersValidator";
 
 const router = Router();

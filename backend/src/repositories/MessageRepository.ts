@@ -4,7 +4,7 @@ import { ValidationError } from "joi";
 import { sendMessageSchema, getMessagesSchema } from "../validationSchemas";
 
 import MessageService from "../services/MessageService";
-import FriendsService from "../api/services/FriendsService";
+import FriendsService from "../services/FriendsService";
 
 const getFirstErrorMessage = (error: unknown) => {
   if(error instanceof ValidationError) {

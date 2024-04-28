@@ -3,7 +3,7 @@ import { getUserIdFromRequest } from "../utils";
 import asyncHandler from "express-async-handler";
 import multer from "multer";
 
-import UserRepository from "../repositories/UserRepository";
+import UserRepository from "../../repositories/UserRepository";
 import UserValidator from "../validators/UserValidator";
 import authorize from "../middlewares/authorize";
 

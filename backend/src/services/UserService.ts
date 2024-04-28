@@ -1,4 +1,4 @@
-import UserModel, { User } from "../../models/User";
+import UserModel, { User } from "../models/User";
 
 export interface CreateUserData {
   username: string;

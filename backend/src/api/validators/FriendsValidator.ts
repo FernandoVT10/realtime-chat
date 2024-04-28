@@ -2,8 +2,8 @@ import { isValidObjectId } from "mongoose";
 import { Schema, checkSchema } from "express-validator";
 import checkValidation from "../middlewares/checkValidation";
 
-import UserService from "../services/UserService";
-import FriendsService from "../services/FriendsService";
+import UserService from "../../services/UserService";
+import FriendsService from "../../services/FriendsService";
 
 const sendFriendRequestSchema: Schema = {
   friendId: {

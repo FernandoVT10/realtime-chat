@@ -3,9 +3,9 @@ import jwt from "jsonwebtoken";
 import sharp from "sharp";
 import path from "path";
 
-import { RequestError } from "../../errors";
+import { RequestError } from "../errors";
 import UserService, { CreateUserData } from "../services/UserService";
-import { JWT_SECRET_KEY, UPLOADS_DIRECTORY } from "../../constants";
+import { JWT_SECRET_KEY, UPLOADS_DIRECTORY } from "../constants";
 
 import type { UserProfile } from "shared/types";
 

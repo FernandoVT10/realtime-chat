@@ -1,5 +1,5 @@
-import FriendRequestModel, { FriendRequest } from "../../models/FriendRequest";
-import FriendModel from "../../models/Friend";
+import FriendRequestModel, { FriendRequest } from "../models/FriendRequest";
+import FriendModel from "../models/Friend";
 
 import type { UserFriendRequest, UserProfile } from "shared/types";
 

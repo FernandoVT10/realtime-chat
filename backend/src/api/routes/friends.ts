@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { getUserIdFromRequest } from "../utils";
 
-import FriendsRepository from "../repositories/FriendsRepository";
+import FriendsRepository from "../../repositories/FriendsRepository";
 import authorize from "../middlewares/authorize";
 import asyncHandler from "express-async-handler";
 import FriendsValidator from "../validators/FriendsValidator";

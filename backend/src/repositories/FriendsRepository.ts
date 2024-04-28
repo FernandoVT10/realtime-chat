@@ -1,5 +1,5 @@
 import type { UserFriendRequest, UserProfile } from "shared/types";
-import { RequestError } from "../../errors";
+import { RequestError } from "../errors";
 import FriendsService from "../services/FriendsService";
 
 const sendRequest = async (userId: string, friendId: string): Promise<boolean> => {
