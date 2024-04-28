@@ -1,7 +1,8 @@
 import { useModal } from "../Modal";
-import { useState, useEffect } from "react";
-import { UserProfile, FriendProfile } from "shared/types";
+import { useState, useEffect, useContext } from "react";
+import { UserProfile, FriendProfile, Message } from "shared/types";
 
+import SocketContext from "../../SocketContext";
 import UserAvatar from "./UserAvatar";
 import AddFriendModal from "./AddFriendModal";
 import UserInfo from "./UserInfo";
@@ -24,6 +25,7 @@ function SideBar({ user, selectedFriend, setSelectedFriend }: SideBarProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const socket = useContext(SocketContext);
   const addFriendModal = useModal();
   const pendingRequestsModal = useModal();
 
@@ -52,7 +54,24 @@ function SideBar({ user, selectedFriend, setSelectedFriend }: SideBarProps) {
 
   useEffect(() => {
     fetchFriends();
-  }, []);
+
+    const listener = (createdMessage: Message) => {
+      if(selectedFriend?._id === createdMessage.createdBy) return;
+
+      setFriends(friends => friends.map(f => {
+        // mark messages as read
+        if(f._id === createdMessage.createdBy) f.pendingMessagesCount++;
+
+        return f;
+      }));
+    };
+
+    socket.on("new-message", listener);
+
+    return () => {
+      socket.removeListener("new-message", listener);
+    };
+  }, [selectedFriend]);
 
   const getFriendsComponent = () => {
     if(loading) {

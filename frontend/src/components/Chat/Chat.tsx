@@ -1,13 +1,13 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useContext } from "react";
 import { UserProfile, Message as MessageType } from "shared/types";
 import { toast } from "react-toastify";
 import { IconSend2 } from "@tabler/icons-react";
 import { MESSAGE_CONFIG } from "shared/constants";
 
+import SocketContext from "../../SocketContext";
 import UserAvatar from "../SideBar/UserAvatar";
 import Spinner from "../Spinner";
 import classNames from "classnames";
-import socket from "../../config/socket";
 import axiosInstance from "../../axios";
 import styles from "./Chat.module.scss";
 
@@ -55,6 +55,8 @@ interface SendMessageFormProps {
 function SendMessageForm({ friend, addMessage }: SendMessageFormProps) {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const socket = useContext(SocketContext);
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
     setMessage(e.target.value);
@@ -119,15 +121,9 @@ function Chat({ selectedFriend, user }: ChatProps) {
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const socket = useContext(SocketContext);
+
   const messageContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    socket.connect();
-
-    socket.on("connect_error", () => {
-      toast.error("There was an error trying to connect to the server.");
-    });
-  }, []);
 
   useEffect(() => {
     const listener = (createdMessage: MessageType, cb: (data: unknown) => void) => {
