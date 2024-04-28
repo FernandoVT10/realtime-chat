@@ -58,14 +58,5 @@ export const initSocketServer = (ioServer: Server) => {
         handleError(error, cb);
       }
     });
-
-    socket.on("get-messages", async (friendId, cb) => {
-      try {
-        const messages = await MessageRepository.getMesssages(userId, friendId);
-        cb(messages);
-      } catch (error) {
-        handleError(error, cb);
-      }
-    });
   });
 };

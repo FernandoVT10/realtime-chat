@@ -8,6 +8,7 @@ import UserAvatar from "../SideBar/UserAvatar";
 import Spinner from "../Spinner";
 import classNames from "classnames";
 import socket from "../../config/socket";
+import axiosInstance from "../../axios";
 import styles from "./Chat.module.scss";
 
 interface GroupedMessage {
@@ -144,18 +145,24 @@ function Chat({ selectedFriend, user }: ChatProps) {
 
   useEffect(() => {
     const getMessages = async () => {
-      if(!selectedFriend || loading || !socket.connected) return;
+      if(!selectedFriend || loading) return;
 
       setLoading(true);
 
-      const messages = await socket.emitWithAck("get-messages", selectedFriend._id);
-      setMessages(messages);
+      try {
+        const res = await axiosInstance.get<{ messages: MessageType[] }>("/messages", {
+          params: { friendId: selectedFriend._id },
+        });
+        setMessages(res.data.messages);
+      } catch {
+        toast.error("There was an error trying to get the messages");
+      }
 
       setLoading(false);
     };
 
     getMessages();
-  }, [selectedFriend, socket.connected]);
+  }, [selectedFriend]);
 
   useEffect(() => {
     if(!messageContainerRef.current) return;
@@ -197,6 +204,15 @@ function Chat({ selectedFriend, user }: ChatProps) {
   }, [messages]);
 
   if(!selectedFriend) return null;
+
+
+  if(loading) {
+    return (
+      <div className={styles.loader}>
+        <Spinner size={80}/>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.chat}>
