@@ -64,6 +64,7 @@ export const initSocketServer = (ioServer: Server) => {
           if(responses.length > 0 && responses[0].read) {
             await MessageRepository.markMessageAsRead(createdMessage._id);
           } 
+          // eslint-disable-next-line
         } catch {}
 
         cb({ status: 200, createdMessage });

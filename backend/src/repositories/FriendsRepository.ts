@@ -50,7 +50,7 @@ const getFriends = async (userId: string): Promise<FriendProfile[]> => {
   }
 
   return friends;
-}
+};
 
 export default {
   sendRequest,

@@ -75,12 +75,12 @@ const findFriends = async (userId: string): Promise<UserProfile[]> => {
     return (friendDoc.friend as HydratedDocument<User>)
       .toObject({ getters: true }) as UserProfile;
   });
-}
+};
 
 const countPendingMessages = (userId: string, friendId: string): Promise<number> => {
   return MessageModel.countDocuments({
-    createdBy: [userId, friendId],
-    sentTo: [userId, friendId],
+    createdBy: friendId,
+    sentTo: userId,
     hasBeenRead: false,
   });
 };

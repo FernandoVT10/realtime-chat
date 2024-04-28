@@ -27,14 +27,14 @@ const markMessagesAsRead = async (userId: string, friendId: string): Promise<voi
       sentTo: [userId, friendId],
       hasBeenRead: false,
     },
-    { $set: { hasBeenRead: true } },
+    { $set: { hasBeenRead: true } }
   );
 };
 
 const markMessageAsRead = async (messageId: string): Promise<boolean> => {
   const res = await MessageModel.updateOne(
     { _id: messageId, hasBeenRead: false },
-    { $set: { hasBeenRead: true } },
+    { $set: { hasBeenRead: true } }
   );
   return res.modifiedCount > 0;
 };
