@@ -23,7 +23,8 @@ const authorizeMiddleware = async (socket: Socket, next: SocketNextFn) => {
   }
 };
 
-const handleError = (error: unknown, cb: (data: unknown) => void): void => {
+// eslint-disable-next-line
+const handleError = (error: unknown, cb: Function): void => {
   if(error instanceof RequestError) {
     cb({
       status: error.statusCode,
@@ -40,64 +41,74 @@ const handleError = (error: unknown, cb: (data: unknown) => void): void => {
   }
 };
 
+const onSendMessage = (socket: Socket) => async (message: string, friendId: string, cb: unknown) => {
+  const { userId } = socket.data;
+
+  if(typeof cb !== "function") return;
+
+  try {
+    const createdMessage = await MessageRepository.createMessage(userId, friendId, message);
+
+    try {
+      // only one user should be in the "friendId" room
+      const responses = await socket
+        .to(friendId)
+        .timeout(100)
+        .emitWithAck("new-message", createdMessage);
+
+      if(responses.length > 0 && responses[0].read) {
+        await MessageRepository.markMessageAsRead(createdMessage._id);
+      } 
+      // eslint-disable-next-line
+    } catch {}
+
+    cb({ status: 200, createdMessage });
+  } catch (error) {
+    handleError(error, cb);
+  }
+};
+
+const onDisconnect = (socket: Socket, friendsIds: string[]) => async () => {
+  const { userId } = socket.data;
+
+  if(friendsIds.length) {
+    socket.to(friendsIds).emit("friend-disconnected", userId);
+  }
+
+  try {
+    await UserRepository.updateUserStatus(userId, false);
+  } catch (error) {
+    console.error("Error: couldn't set isOnline to false", error);
+  }
+};
+
+const onConnection = async (socket: Socket) => {
+  const { userId } = socket.data;
+
+  socket.join(userId);
+
+  let friendsIds: string[] = [];
+
+  try {
+    friendsIds = await FriendsRepository.getFriendsIds(userId);
+    socket.to(friendsIds).emit("friend-connected", userId);
+  } catch (error) {
+    console.error("Error: couldn't get the friendsIds", error);
+  }
+
+  try {
+    await UserRepository.updateUserStatus(userId, true);
+  } catch (error) {
+    console.error("Error: couldn't set isOnline to true", error);
+  }
+
+  socket.on("send-message", onSendMessage(socket));
+
+  socket.on("disconnect", onDisconnect(socket, friendsIds));
+};
+
 export const initSocketServer = (ioServer: Server) => {
   ioServer.use(authorizeMiddleware);
 
-  ioServer.on("connection", async (socket) => {
-    const { userId } = socket.data;
-
-    socket.join(userId);
-
-    let friendsIds: string[];
-
-    try {
-      friendsIds = await FriendsRepository.getFriendsIds(userId);
-      socket.to(friendsIds).emit("friend-connected", userId);
-    } catch (error) {
-      console.error("Error: couldn't get the friendsIds", error);
-    }
-
-    try {
-      await UserRepository.updateUserStatus(userId, true);
-    } catch (error) {
-      console.error("Error: couldn't set isOnline to true", error);
-    }
-
-    socket.on("send-message", async (message, friendId, cb) => {
-      if(typeof cb !== "function") return;
-
-      try {
-        const createdMessage = await MessageRepository.createMessage(userId, friendId, message);
-
-        try {
-          // only one user should be in the "friendId" room
-          const responses = await socket
-            .to(friendId)
-            .timeout(100)
-            .emitWithAck("new-message", createdMessage);
-
-          if(responses.length > 0 && responses[0].read) {
-            await MessageRepository.markMessageAsRead(createdMessage._id);
-          } 
-          // eslint-disable-next-line
-        } catch {}
-
-        cb({ status: 200, createdMessage });
-      } catch (error) {
-        handleError(error, cb);
-      }
-    });
-
-    socket.on("disconnect", async () => {
-      if(friendsIds.length) {
-        socket.to(friendsIds).emit("friend-disconnected", userId);
-      }
-
-      try {
-        await UserRepository.updateUserStatus(userId, false);
-      } catch (error) {
-        console.error("Error: couldn't set isOnline to false", error);
-      }
-    });
-  });
+  ioServer.on("connection", onConnection);
 };
