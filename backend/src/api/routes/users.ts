@@ -9,7 +9,8 @@ import UsersValidator from "../validators/UsersValidator";
 const router = Router();
 
 router.get("/", authorize(), ...UsersValidator.users, asyncHandler(async (req, res) => {
-  const { search } = req.query;
+  // sanitizing the search string, since it's going to be used to create a regex
+  const search = (req.query.search as string).replace(/[#-.]|[[-^]|[?|{}]/g, "\\$&");
 
   const userId = getUserIdFromRequest(req);
 
