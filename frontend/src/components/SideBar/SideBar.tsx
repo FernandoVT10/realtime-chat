@@ -30,6 +30,8 @@ function SideBar({ user, selectedFriend, setSelectedFriend }: SideBarProps) {
   const pendingRequestsModal = useModal();
 
   const fetchFriends = async () => {
+    setLoading(true);
+
     try {
       const res = await axiosInstance.get<{ friends: FriendProfile[] }>("/friends");
 
@@ -41,9 +43,30 @@ function SideBar({ user, selectedFriend, setSelectedFriend }: SideBarProps) {
     setLoading(false);
   };
 
+  useEffect(() => {
+    fetchFriends();
+  }, []);
+
+  useEffect(() => {
+    const onNewMessage = (createdMessage: Message) => {
+      if(selectedFriend?._id === createdMessage.createdBy) return;
+
+      setFriends(friends => friends.map(f => {
+        if(f._id === createdMessage.createdBy) f.pendingMessagesCount++;
+
+        return f;
+      }));
+    };
+
+    socket.on("new-message", onNewMessage);
+
+    return () => {
+      socket.removeListener("new-message", onNewMessage);
+    };
+  }, [selectedFriend]);
+
   const handleSelectFriend = (friend: FriendProfile) => {
     setFriends(friends.map(f => {
-      // mark messages as read
       if(f._id === friend._id) f.pendingMessagesCount = 0;
 
       return f;
@@ -51,27 +74,6 @@ function SideBar({ user, selectedFriend, setSelectedFriend }: SideBarProps) {
 
     setSelectedFriend(friend);
   };
-
-  useEffect(() => {
-    fetchFriends();
-
-    const listener = (createdMessage: Message) => {
-      if(selectedFriend?._id === createdMessage.createdBy) return;
-
-      setFriends(friends => friends.map(f => {
-        // mark messages as read
-        if(f._id === createdMessage.createdBy) f.pendingMessagesCount++;
-
-        return f;
-      }));
-    };
-
-    socket.on("new-message", listener);
-
-    return () => {
-      socket.removeListener("new-message", listener);
-    };
-  }, [selectedFriend]);
 
   const getFriendsComponent = () => {
     if(loading) {

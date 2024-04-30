@@ -24,17 +24,17 @@ function App() {
       try {
         const res = await axiosInstance.get<UserProfile>("/user/profile");
 
+        socket.connect();
+
+        socket.on("connect_error", () => {
+          toast.error("There was an error trying to connect to the server.");
+        });
+
         setUser(res.data);
       } catch {}
 
       setLoading(false);
     };
-
-    socket.connect();
-
-    socket.on("connect_error", () => {
-      toast.error("There was an error trying to connect to the server.");
-    });
 
     getProfile();
   }, []);

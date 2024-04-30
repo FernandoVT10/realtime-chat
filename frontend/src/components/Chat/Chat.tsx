@@ -126,17 +126,17 @@ function Chat({ selectedFriend, user }: ChatProps) {
   const messageContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const listener = (createdMessage: MessageType, cb: (data: unknown) => void) => {
+    const onNewMessage = (createdMessage: MessageType, cb: (data: unknown) => void) => {
       if(createdMessage.createdBy === selectedFriend?._id) {
         addMessage(createdMessage);
         cb({ read: true });
       }
     };
 
-    socket.on("new-message", listener);
+    socket.on("new-message", onNewMessage);
 
     return () => {
-      socket.removeListener("new-message", listener);
+      socket.removeListener("new-message", onNewMessage);
     };
   }, [selectedFriend]);
 
