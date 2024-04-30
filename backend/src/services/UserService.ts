@@ -36,9 +36,19 @@ const findOneById = async (id: string, options?: FindOneByIdOptions): Promise<Us
   return user;
 };
 
+const updateStatusById = async (userId: string, isOnline: boolean): Promise<boolean> => {
+  const res = await UserModel.updateOne(
+    { _id: userId },
+    { $set: { isOnline } }
+  );
+
+  return res.modifiedCount > 0;
+};
+
 export default {
   createOne,
   findOneByUsername,
   updateUserAvatar,
   findOneById,
+  updateStatusById,
 };

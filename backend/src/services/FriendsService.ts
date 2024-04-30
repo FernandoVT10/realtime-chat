@@ -4,7 +4,7 @@ import FriendRequestModel, { FriendRequest } from "../models/FriendRequest";
 import FriendModel from "../models/Friend";
 import MessageModel from "../models/Message";
 
-import type { UserFriendRequest, UserProfile } from "shared/types";
+import type { UserFriendRequest, UserProfile, FriendProfile } from "shared/types";
 
 const existsRequest = async (requestedByUser: string, sentToUser: string): Promise<boolean> => {
   const exists = await FriendRequestModel.exists({ requestedByUser, sentToUser });
@@ -62,18 +62,20 @@ const createFriendship = async (userId: string, friendId: string): Promise<boole
   return true;
 };
 
-const findFriends = async (userId: string): Promise<UserProfile[]> => {
+type PartialFriendProfile = Exclude<FriendProfile, "countPendingMessages">;
+
+const findFriends = async (userId: string): Promise<PartialFriendProfile[]> => {
   const friendsDocs = await FriendModel
     .find({ user: userId })
     .select("friend")
     .populate({
       path: "friend",
-      select: ["_id", "avatar", "username"],
+      select: ["_id", "avatar", "username", "isOnline"],
     });
 
   return friendsDocs.map(friendDoc => {
     return (friendDoc.friend as HydratedDocument<User>)
-      .toObject({ getters: true }) as UserProfile;
+      .toObject({ getters: true }) as PartialFriendProfile;
   });
 };
 
@@ -82,6 +84,17 @@ const countPendingMessages = (userId: string, friendId: string): Promise<number>
     createdBy: friendId,
     sentTo: userId,
     hasBeenRead: false,
+  });
+};
+
+const getFriendsIds = async (userId: string): Promise<string[]> => {
+  const friendsDocs = await FriendModel
+    .find({ user: userId })
+    .select("friend")
+    .lean();
+
+  return friendsDocs.map(friendDoc => {
+    return friendDoc.friend.toString();
   });
 };
 
@@ -95,4 +108,5 @@ export default {
   createFriendship,
   findFriends,
   countPendingMessages,
+  getFriendsIds,
 };

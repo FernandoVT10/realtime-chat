@@ -52,9 +52,13 @@ const getFriends = async (userId: string): Promise<FriendProfile[]> => {
   return friends;
 };
 
+const getFriendsIds = async(userId: string): Promise<string[]> =>
+  FriendsService.getFriendsIds(userId);
+
 export default {
   sendRequest,
   getFriendsRequests,
   acceptRequest,
   getFriends,
+  getFriendsIds,
 };

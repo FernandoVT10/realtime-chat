@@ -35,6 +35,9 @@ export class User extends TimeStamps {
 
   @prop({ get: completeAvatarURL })
   public avatar?: string;
+
+  @prop({ default: false })
+  public isOnline!: boolean;
 }
 
 const UserModel = getModelForClass(User);

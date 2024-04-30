@@ -58,10 +58,30 @@ function SideBar({ user, selectedFriend, setSelectedFriend }: SideBarProps) {
       }));
     };
 
+    const onFriendConnected = (friendId: string) => {
+      setFriends(friends => friends.map(f => {
+        if(f._id === friendId) f.isOnline = true;
+
+        return f;
+      }));
+    };
+
+    const onFriendDisconnected = (friendId: string) => {
+      setFriends(friends => friends.map(f => {
+        if(f._id === friendId) f.isOnline = false;
+
+        return f;
+      }));
+    };
+
     socket.on("new-message", onNewMessage);
+    socket.on("friend-connected", onFriendConnected);
+    socket.on("friend-disconnected", onFriendDisconnected);
 
     return () => {
       socket.removeListener("new-message", onNewMessage);
+      socket.removeListener("friend-connected", onFriendConnected);
+      socket.removeListener("friend-disconnected", onFriendDisconnected);
     };
   }, [selectedFriend]);
 
@@ -117,7 +137,7 @@ function SideBar({ user, selectedFriend, setSelectedFriend }: SideBarProps) {
                 key={friend._id}
               >
                 <div className={styles.profile}>
-                  <UserAvatar avatar={friend.avatar} status={{ isOnline: true }} />
+                  <UserAvatar avatar={friend.avatar} status={{ isOnline:  friend.isOnline }} />
                   <span className={styles.username}>{friend.username}</span>
                 </div>
                 {friend.pendingMessagesCount > 0 && (

@@ -115,10 +115,14 @@ const getUserProfile = async (userId: string): Promise<UserProfile> => {
   };
 };
 
+const updateUserStatus = async (userId: string, isOnline: boolean): Promise<boolean> =>
+  UserService.updateStatusById(userId, isOnline);
+
 export default {
   createUser,
   usernameExists,
   getAuthToken,
   updateAvatar,
   getUserProfile,
+  updateUserStatus,
 };

@@ -6,6 +6,7 @@ export interface UserProfile {
 
 export interface FriendProfile extends UserProfile {
   pendingMessagesCount: number;
+  isOnline: boolean;
 }
 
 export interface UserFriendRequest {

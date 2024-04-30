@@ -3,6 +3,8 @@ import { RequestError } from "./errors";
 
 import getUserIdFromAuthToken from "./utils/getUserIdFromAuthToken";
 import MessageRepository from "./repositories/MessageRepository";
+import FriendsRepository from "./repositories/FriendsRepository";
+import UserRepository from "./repositories/UserRepository";
 
 type SocketNextFn = (err?: Error) => void;
 
@@ -41,18 +43,31 @@ const handleError = (error: unknown, cb: (data: unknown) => void): void => {
 export const initSocketServer = (ioServer: Server) => {
   ioServer.use(authorizeMiddleware);
 
-  ioServer.on("connection", (socket) => {
+  ioServer.on("connection", async (socket) => {
     const { userId } = socket.data;
 
     socket.join(userId);
-    console.log("User connected with ID:", socket.data.userId);
+
+    let friendsIds: string[];
+
+    try {
+      friendsIds = await FriendsRepository.getFriendsIds(userId);
+      socket.to(friendsIds).emit("friend-connected", userId);
+    } catch (error) {
+      console.error("Error: couldn't get the friendsIds", error);
+    }
+
+    try {
+      await UserRepository.updateUserStatus(userId, true);
+    } catch (error) {
+      console.error("Error: couldn't set isOnline to true", error);
+    }
 
     socket.on("send-message", async (message, friendId, cb) => {
       if(typeof cb !== "function") return;
 
       try {
         const createdMessage = await MessageRepository.createMessage(userId, friendId, message);
-
 
         try {
           // only one user should be in the "friendId" room
@@ -70,6 +85,18 @@ export const initSocketServer = (ioServer: Server) => {
         cb({ status: 200, createdMessage });
       } catch (error) {
         handleError(error, cb);
+      }
+    });
+
+    socket.on("disconnect", async () => {
+      if(friendsIds.length) {
+        socket.to(friendsIds).emit("friend-disconnected", userId);
+      }
+
+      try {
+        await UserRepository.updateUserStatus(userId, false);
+      } catch (error) {
+        console.error("Error: couldn't set isOnline to false", error);
       }
     });
   });
