@@ -12,10 +12,12 @@ router.get("/", authorize(), asyncHandler(async (req, res) => {
 
   const { friendId } = req.query;
 
-  const messages = await MessageRepository.getMesssages(userId, String(friendId));
+  const offset = parseInt(String(req.query.offset)) || 0;
+
+  const pagination = await MessageRepository.getMessagesPagination(userId, String(friendId), offset);
 
   res.json({
-    data: { messages },
+    data: pagination,
   });
 }));
 

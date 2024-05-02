@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="85.442604mm"
+   height="92.312805mm"
+   viewBox="0 0 85.442604 92.312805"
+   version="1.1"
+   id="svg5"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2" />
+  <g
+     id="layer1">
+    <g
+       id="g20471">
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:70.5556px;line-height:1.25;font-family:sans-serif;fill:#162126;fill-opacity:1;stroke:none;stroke-width:0.264583"
+         x="-3.4219468"
+         y="94.076698"
+         id="text2407"><tspan
+           id="tspan2405"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:70.5556px;font-family:'3270Condensed Nerd Font';-inkscape-font-specification:'3270Condensed Nerd Font';fill:#162126;fill-opacity:1;stroke-width:0.264583"
+           x="-3.4219468"
+           y="94.076698">404</tspan></text>
+      <g
+         id="g27195"
+         transform="matrix(0.43433507,0,0,0.43433434,5.6075,-65.150144)"
+         style="fill:#162126;fill-opacity:1">
+        <path
+           id="path22920-6"
+           style="fill:#162126;fill-opacity:1;stroke-width:0.264582"
+           d="m 85.897998,192.6458 v 50.00005 h -49.99985 a 49.999799,50 0 0 1 49.99985,-50.00005 z" />
+        <rect
+           id="rect25744-03"
+           width="3.9999838"
+           height="40"
+           x="-85.898003"
+           y="150"
+           style="fill:#162126;fill-opacity:1;stroke-width:0.211476"
+           transform="scale(-1,1)" />
+        <rect
+           id="rect25744-6-1"
+           width="7.9999809"
+           height="29.99995"
+           x="77.151016"
+           y="151.02574"
+           style="fill:#162126;fill-opacity:1;stroke-width:0.259003"
+           transform="matrix(-0.7661047,0.64271579,0.64271275,0.76610725,0,0)" />
+        <rect
+           id="rect25744-6-8-0"
+           width="7.9999957"
+           height="29.999897"
+           x="184.33505"
+           y="83.05323"
+           style="fill:#162126;fill-opacity:1;stroke-width:0.259003"
+           transform="matrix(-0.37474676,0.92712721,0.92712616,0.37474936,0,0)" />
+        <rect
+           id="rect25744-2-6"
+           width="4"
+           height="39.99984"
+           x="238.64584"
+           y="0"
+           style="fill:#162126;fill-opacity:1;stroke-width:0.211476"
+           transform="matrix(0,1,1,0,0,0)" />
+        <rect
+           id="rect25744-2-6-9"
+           width="5.7281504"
+           height="170.89799"
+           x="242.146"
+           y="0"
+           style="fill:#162126;fill-opacity:1;stroke-width:0.523091"
+           transform="matrix(0,1,1,0,0,0)" />
+        <path
+           id="path22920-6-0"
+           style="fill:#162126;fill-opacity:1;stroke-width:0.264582"
+           d="m 85.000005,192.64579 v 50.00005 H 134.99986 A 49.999799,50 0 0 0 85.000005,192.64579 Z" />
+        <rect
+           id="rect25744-03-8"
+           width="3.9999838"
+           height="40"
+           x="85"
+           y="149.99998"
+           style="fill:#162126;fill-opacity:1;stroke-width:0.211476" />
+        <rect
+           id="rect25744-6-1-5"
+           width="7.9999809"
+           height="29.99995"
+           x="208.07722"
+           y="41.186886"
+           style="fill:#162126;fill-opacity:1;stroke-width:0.259003"
+           transform="matrix(0.7661047,0.64271579,-0.64271275,0.76610725,0,0)" />
+        <rect
+           id="rect25744-6-8-0-8"
+           width="7.9999957"
+           height="29.999897"
+           x="248.37898"
+           y="-75.390976"
+           style="fill:#162126;fill-opacity:1;stroke-width:0.259003"
+           transform="matrix(0.37474676,0.92712721,-0.92712616,0.37474936,0,0)" />
+        <rect
+           id="rect25744-2-6-0"
+           width="4"
+           height="39.99984"
+           x="238.64584"
+           y="-170.89801"
+           style="fill:#162126;fill-opacity:1;stroke-width:0.211476"
+           transform="rotate(90)" />
+      </g>
+    </g>
+  </g>
+</svg>

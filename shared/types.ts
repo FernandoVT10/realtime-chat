@@ -23,3 +23,9 @@ export interface Message {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface MessagesPagination {
+  messages: Message[];
+  messagesCount: number;
+  limit: number;
+}

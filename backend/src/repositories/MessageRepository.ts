@@ -1,10 +1,12 @@
-import { Message } from "shared/types";
+import { Message, MessagesPagination } from "shared/types";
 import { RequestError } from "../errors";
 import { ValidationError } from "joi";
 import { sendMessageSchema, getMessagesSchema } from "../validationSchemas";
 
 import MessageService from "../services/MessageService";
 import FriendsService from "../services/FriendsService";
+
+const LIMIT_OF_MESSAGES = 40;
 
 const getFirstErrorMessage = (error: unknown) => {
   if(error instanceof ValidationError) {
@@ -41,7 +43,11 @@ const createMessage = async (userId: string, friendId: string, message: string):
   return createdMessage;
 };
 
-const getMesssages = async (userId: string, friendId: string): Promise<Message[]> => {
+const getMessagesPagination = async (
+  userId: string,
+  friendId: string,
+  offset: number
+): Promise<MessagesPagination> => {
   try {
     await getMessagesSchema.validateAsync({ friendId }, { abortEarly: true });
   } catch (error) {
@@ -50,11 +56,16 @@ const getMesssages = async (userId: string, friendId: string): Promise<Message[]
 
   await validateUsersIds(userId, friendId);
 
-  const messages = await MessageService.getAll(userId, friendId);
+  const messages = await MessageService.getAll(userId, friendId, LIMIT_OF_MESSAGES, offset);
+  const messagesCount = await MessageService.countAll(userId, friendId);
 
   await MessageService.markMessagesAsRead(userId, friendId);
 
-  return messages;
+  return {
+    messages: messages,
+    messagesCount: messagesCount,
+    limit: LIMIT_OF_MESSAGES,
+  };
 };
 
 const markMessageAsRead = (messageId: string): Promise<boolean> =>
@@ -62,6 +73,6 @@ const markMessageAsRead = (messageId: string): Promise<boolean> =>
 
 export default {
   createMessage,
-  getMesssages,
+  getMessagesPagination,
   markMessageAsRead,
 };

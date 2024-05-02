@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback, useRef, useContext } from "react";
-import { UserProfile, Message as MessageType } from "shared/types";
+import { UserProfile, Message as MessageType, MessagesPagination } from "shared/types";
 import { toast } from "react-toastify";
-import { IconSend2 } from "@tabler/icons-react";
-import { MESSAGE_CONFIG } from "shared/constants";
 
+import SendMessageForm from "./SendMessageForm";
 import SocketContext from "../../SocketContext";
 import UserAvatar from "../SideBar/UserAvatar";
 import Spinner from "../Spinner";
@@ -20,6 +19,17 @@ interface MessageProps {
   messages: string[];
   author: UserProfile;
   isFriendMessage: boolean;
+}
+
+interface ChatProps {
+  selectedFriend: UserProfile | undefined;
+  user: UserProfile;
+}
+
+interface PaginationData {
+  limit: MessagesPagination["limit"];
+  messagesCount: MessagesPagination["messagesCount"];
+  offset: number;
 }
 
 function Message({ messages, author, isFriendMessage }: MessageProps) {
@@ -47,85 +57,52 @@ function Message({ messages, author, isFriendMessage }: MessageProps) {
   );
 }
 
-interface SendMessageFormProps {
-  friend: UserProfile;
-  addMessage: (newMessage: MessageType) => void;
-}
-
-function SendMessageForm({ friend, addMessage }: SendMessageFormProps) {
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const socket = useContext(SocketContext);
-
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
-    setMessage(e.target.value);
-
-  const sendMessage: React.FormEventHandler = async (e) => {
-    e.preventDefault();
-
-    if(!socket.connected) return toast.error("You are disconnected from the server");
-
-    try {
-      setLoading(true);
-      const res = await socket.emitWithAck("send-message", message, friend._id);
-      setLoading(false);
-
-      if(res.status !== 200) throw new Error;
-
-      addMessage(res.createdMessage);
-      setMessage("");
-    } catch {
-      toast.error("There was an error trying to send your message");
-    }
-  };
-
-  const sendMessageFormClass = classNames(styles.sendMessageForm, {
-    [styles.loading]: loading,
-  });
-
-  return (
-    <form onSubmit={sendMessage}>
-      <div className={sendMessageFormClass}>
-        <input
-          className={styles.input}
-          value={message}
-          onChange={handleChange}
-          placeholder={`Write a message to ${friend.username}`}
-          maxLength={MESSAGE_CONFIG.contentMaxLength}
-        />
-
-        {loading ? (
-          <div className={styles.loader}>
-            <Spinner size={20}/>
-          </div>
-        ) : (
-          <button
-            className={styles.button}
-            type="submit"
-          >
-            <IconSend2 size={25}/>
-          </button>
-        )}
-      </div>
-    </form>
-  );
-}
-
-interface ChatProps {
-  selectedFriend: UserProfile | undefined;
-  user: UserProfile;
-}
-
 function Chat({ selectedFriend, user }: ChatProps) {
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingNewData, setLoadingNewData] = useState(false);
 
   const socket = useContext(SocketContext);
 
-  const messageContainerRef = useRef<HTMLDivElement>(null);
+  const previousScrollHeight = useRef(0);
+  const previousScrollPos = useRef(0);
+  const fetchByScrolling = useRef(false);
+  const paginationData = useRef<PaginationData>();
+
+  const addMessage = useCallback((newMessage: MessageType) => {
+    setMessages(messages => [...messages, newMessage]);
+  }, []);
 
   useEffect(() => {
+    const getMessages = async () => {
+      if(!selectedFriend || loading) return;
+
+      setLoading(true);
+
+      try {
+        const res = await axiosInstance.get<MessagesPagination>("/messages", {
+          params: { friendId: selectedFriend._id },
+        });
+
+        setMessages(res.data.messages);
+
+        paginationData.current = {
+          limit: res.data.limit,
+          messagesCount: res.data.messagesCount,
+          offset: 0,
+        };
+
+        fetchByScrolling.current = false;
+      } catch {
+        // TODO: create a svg to illustrate this error
+        toast.error("There was an error trying to get the messages");
+      }
+
+      setLoading(false);
+    };
+
+    getMessages();
+
     const onNewMessage = (createdMessage: MessageType, cb: (data: unknown) => void) => {
       if(createdMessage.createdBy === selectedFriend?._id) {
         addMessage(createdMessage);
@@ -141,35 +118,54 @@ function Chat({ selectedFriend, user }: ChatProps) {
   }, [selectedFriend]);
 
   useEffect(() => {
-    const getMessages = async () => {
-      if(!selectedFriend || loading) return;
+    const messageContainer = document.getElementById("message-container");
 
-      setLoading(true);
+    if(!messageContainer) return;
 
-      try {
-        const res = await axiosInstance.get<{ messages: MessageType[] }>("/messages", {
-          params: { friendId: selectedFriend._id },
-        });
-        setMessages(res.data.messages);
-      } catch {
-        toast.error("There was an error trying to get the messages");
-      }
+    const { scrollHeight } = messageContainer;
 
-      setLoading(false);
-    };
-
-    getMessages();
-  }, [selectedFriend]);
-
-  useEffect(() => {
-    if(!messageContainerRef.current) return;
-
-    const { scrollHeight } = messageContainerRef.current;
-    messageContainerRef.current.scroll({ top: scrollHeight });
+    if(fetchByScrolling.current) {
+      // If the new messages were fetch by scrolling up, we want to restore the previous scroll position.
+      // This code will keep the messages that were displayed on screen in the same position with this
+      // we will avoid weird jumps after the new messages are added.
+      const newMessagesHeight = scrollHeight - previousScrollHeight.current;
+      messageContainer.scroll({ top:  newMessagesHeight + previousScrollPos.current });
+    } else {
+      messageContainer.scroll({ top: scrollHeight });
+    }
   }, [messages]);
 
-  const addMessage = (newMessage: MessageType) => {
-    setMessages(messages => [...messages, newMessage]);
+  const onScroll: React.UIEventHandler<HTMLDivElement> = async (e) => {
+    const element = e.target as HTMLDivElement;
+    previousScrollHeight.current = element.scrollHeight;
+    previousScrollPos.current = element.scrollTop;
+
+    if(loadingNewData || element.scrollTop > 500 || !paginationData.current || !selectedFriend)
+      return;
+
+    const { offset, limit, messagesCount } = paginationData.current;
+
+    // when there are no messages left, we just return
+    const newOffset = offset + limit;
+    if(messagesCount - newOffset < 1) return;
+
+    setLoadingNewData(true);
+
+    try {
+      const res = await axiosInstance.get<{ messages: MessageType[] }>("/messages", {
+        params: { friendId: selectedFriend._id, offset: newOffset },
+      });
+
+      const newMessages = res.data.messages;
+      setMessages(messages => newMessages.concat(messages));
+
+      paginationData.current.offset = newOffset;
+      fetchByScrolling.current = true;
+    } catch {
+      toast.error("There was an error trying to get new messages");
+    }
+
+    setLoadingNewData(false);
   };
 
   const getGroupedMessages = useCallback(() => {
@@ -202,7 +198,6 @@ function Chat({ selectedFriend, user }: ChatProps) {
 
   if(!selectedFriend) return null;
 
-
   if(loading) {
     return (
       <div className={styles.loader}>
@@ -213,7 +208,7 @@ function Chat({ selectedFriend, user }: ChatProps) {
 
   return (
     <div className={styles.chat}>
-      <div className={styles.messagesContainer} ref={messageContainerRef}>
+      <div className={styles.messagesContainer} onScroll={onScroll} id="message-container">
         {getGroupedMessages().map((message, index) => {
           const isFriendMessage = message.createdBy === selectedFriend._id;
 

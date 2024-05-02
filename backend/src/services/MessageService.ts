@@ -2,19 +2,18 @@ import MessageModel from "../models/Message";
 
 import { Message } from "shared/types";
 
-const MAX_NUM_MESSAGES = 20;
-
 const createOne = async (content: string, createdBy: string, sentTo: string): Promise<Message> => {
   const createdMessage = await MessageModel.create({ content, createdBy, sentTo });
   return createdMessage.toObject();
 };
 
-const getAll = async (userId: string, friendId: string): Promise<Message[]> => {
+const getAll = async (userId: string, friendId: string, limit: number, offset: number): Promise<Message[]> => {
   const messages = await MessageModel
     .find({ createdBy: [userId, friendId], sentTo: [userId, friendId] })
     .select("-__v")
     .sort({ createdAt: "desc" })
-    .limit(MAX_NUM_MESSAGES)
+    .limit(limit)
+    .skip(offset)
     .lean();
 
   return messages.reverse() as unknown as Message[];
@@ -39,9 +38,17 @@ const markMessageAsRead = async (messageId: string): Promise<boolean> => {
   return res.modifiedCount > 0;
 };
 
+const countAll = (userId: string, friendId: string): Promise<number> => {
+  return MessageModel.countDocuments({
+    createdBy: [userId, friendId],
+    sentTo: [userId, friendId],
+  });
+};
+
 export default {
   createOne,
   getAll,
   markMessagesAsRead,
   markMessageAsRead,
+  countAll,
 };
