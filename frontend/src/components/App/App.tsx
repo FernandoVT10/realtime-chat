@@ -52,12 +52,17 @@ function App() {
     return (
       <SocketContext.Provider value={socket}>
         <div className={styles.appContainer}>
-          <SideBar
-            user={user}
-            selectedFriend={selectedFriend}
-            setSelectedFriend={setSelectedFriend}
-          />
-          <Chat selectedFriend={selectedFriend} user={user}/>
+          <div className={styles.sideBarContainer}>
+            <SideBar
+              user={user}
+              selectedFriend={selectedFriend}
+              setSelectedFriend={setSelectedFriend}
+            />
+          </div>
+
+          <div className={styles.chatContainer}>
+            <Chat selectedFriend={selectedFriend} user={user}/>
+          </div>
         </div>
       </SocketContext.Provider>
     );

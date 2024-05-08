@@ -1,6 +1,7 @@
 import { useModal } from "../Modal";
 import { useState, useEffect, useContext } from "react";
 import { UserProfile, FriendProfile, Message } from "shared/types";
+import { IconArrowLeft } from "@tabler/icons-react";
 
 import SocketContext from "../../SocketContext";
 import UserAvatar from "./UserAvatar";
@@ -24,6 +25,7 @@ function SideBar({ user, selectedFriend, setSelectedFriend }: SideBarProps) {
   const [friends, setFriends] = useState<FriendProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [active, setActive] = useState(true);
 
   const socket = useContext(SocketContext);
   const addFriendModal = useModal();
@@ -91,7 +93,7 @@ function SideBar({ user, selectedFriend, setSelectedFriend }: SideBarProps) {
 
       return f;
     }));
-
+    setActive(false);
     setSelectedFriend(friend);
   };
 
@@ -151,35 +153,59 @@ function SideBar({ user, selectedFriend, setSelectedFriend }: SideBarProps) {
     );
   };
 
+  const sideBarContainerClass = classNames(
+    styles.sideBarContainer,
+    { [styles.active]: active }
+  );
+
   return (
-    <div className={styles.sideBar}>
-      <AddFriendModal modal={addFriendModal}/>
-      <PendingRequests modal={pendingRequestsModal} reFetchFriends={fetchFriends}/>
+    <div className={sideBarContainerClass}>
+      <div className={styles.bg} onClick={() => setActive(false)}></div>
 
-      <div className={styles.buttonsContainer}>
-        <button
-          type="button"
-          onClick={pendingRequestsModal.showModal}
-          className={classNames(styles.button, "custom-submit-button")}
-        >
-          Pending friends requests
+      <div className={styles.topBar}>
+        <button className={styles.menuButton} onClick={() => setActive(true)}>
+          <IconArrowLeft size={25}/>
         </button>
 
-        <button
-          type="button"
-          onClick={addFriendModal.showModal}
-          className={classNames(styles.button, "custom-submit-button")}
-        >
-          Add a new friend
-        </button>
+        { selectedFriend && (
+          <>
+            <UserAvatar avatar={selectedFriend.avatar}/>
+            <span className={styles.selectedFriendUsername}>
+              {selectedFriend.username}
+            </span>
+          </>
+        )}
       </div>
 
-      {getFriendsComponent()}
+      <div className={styles.sideBar}>
+        <AddFriendModal modal={addFriendModal}/>
+        <PendingRequests modal={pendingRequestsModal} reFetchFriends={fetchFriends}/>
 
-      <UserInfo
-        avatar={user.avatar}
-        username={user.username}
-      />
+        <div className={styles.buttonsContainer}>
+          <button
+            type="button"
+            onClick={pendingRequestsModal.showModal}
+            className={classNames(styles.button, "custom-submit-button")}
+          >
+            Pending friends requests
+          </button>
+
+          <button
+            type="button"
+            onClick={addFriendModal.showModal}
+            className={classNames(styles.button, "custom-submit-button")}
+          >
+            Add a new friend
+          </button>
+        </div>
+
+        {getFriendsComponent()}
+
+        <UserInfo
+          avatar={user.avatar}
+          username={user.username}
+        />
+      </div>
     </div>
   );
 }

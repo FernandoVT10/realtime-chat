@@ -1,85 +1,154 @@
-.sideBar {
-  background: var(--color-background-alt);
-  height: 100vh;
-  width: 300px;
+.sideBarContainer {
+  width: 100%;
 
-  & .buttonsContainer {
-    padding: 10px;
+  & .bg {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    background: rgba(0, 0, 0, .5);
+  }
 
-    & .button {
-      width: 100%;
+  & .topBar {
+    display: none;
+    position: absolute;
+    align-items: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    z-index: 1;
+    background: var(--color-background-darker);
+
+    & .menuButton {
+      border: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: transparent;
+      color: var(--color-text);
+      width: 60px;
+      height: 60px;
+    }
+
+    & .selectedFriendUsername {
+      font-weight: bold;
+      margin-left: 10px;
+    }
+  }
+
+  & .sideBar {
+    position: relative;
+    background: var(--color-background-alt);
+    height: 100vh;
+    width: 100%;
+
+    & .buttonsContainer {
+      padding: 10px;
+
+      & .button {
+        width: 100%;
+        margin-top: 10px;
+
+        &:nth-child(1) { margin: 0; }
+      }
+    }
+
+    & .subtitle {
+      margin-top: 20px;
+      margin-left: 20px;
+      font-size: 14px;
+    }
+
+    & .statusContainer {
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+
+      & .errorMessage, & .infoMessage {
+        font-weight: bold;
+      }
+
+      & .errorMessage { color: var(--color-red); }
+      & .infoMessage { color: var(--color-blue); }
+    }
+
+    & .friends {
       margin-top: 10px;
 
-      &:nth-child(1) { margin: 0; }
-    }
-  }
-  
-  & .subtitle {
-    margin-top: 20px;
-    margin-left: 20px;
-    font-size: 14px;
-  }
-
-  & .statusContainer {
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-
-    & .errorMessage, & .infoMessage {
-      font-weight: bold;
-    }
-
-    & .errorMessage { color: var(--color-red); }
-    & .infoMessage { color: var(--color-blue); }
-  }
-
-  & .friends {
-    margin-top: 10px;
-
-    & .friend {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 20px;
-      border-bottom: solid 1px var(--color-background);
-      background: transparent;
-      transition: .3s;
-
-      &:hover {
-        background: var(--color-background);
-        border-color: var(--color-border);
-      }
-
-      &.selected {
-        background: var(--color-background-light);
-        border-color: var(--color-highlighted-border);
-      }
-
-      & .profile {
+      & .friend {
+        cursor: pointer;
         display: flex;
         align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px;
+        border-bottom: solid 1px var(--color-background);
+        background: transparent;
+        transition: .3s;
 
-        & .username {
-          display: block;
-          font-size: 14px;
+        &:hover {
+          background: var(--color-background);
+          border-color: var(--color-border);
+        }
+
+        &.selected {
+          background: var(--color-background-light);
+          border-color: var(--color-highlighted-border);
+        }
+
+        & .profile {
+          display: flex;
+          align-items: center;
+
+          & .username {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-left: 10px;
+          }
+        }
+
+        & .pendingMessages {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 25px;
+          height: 25px;
+          font-size: 12px;
           font-weight: bold;
-          margin-left: 10px;
+          border-radius: 50%;
+          background: var(--color-blue);
+          color: var(--color-text-dark);
         }
       }
+    }
+  }
 
-      & .pendingMessages {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 25px;
-        height: 25px;
-        font-size: 12px;
-        font-weight: bold;
-        border-radius: 50%;
-        background: var(--color-blue);
-        color: var(--color-text-dark);
+  @media screen and (max-width: 900px) {
+    &.active {
+      & .bg {
+        display: block;
       }
+
+      & .sideBar {
+        left: 0;
+      }
+    }
+
+    & .topBar {
+      display: flex;
+    }
+
+    & .sideBar {
+      position: absolute;
+      left: -300px;
+      z-index: 2;
+      width: 300px;
+      overflow: auto;
+      transition: .3s;
     }
   }
 }

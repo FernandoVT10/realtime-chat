@@ -1,5 +1,23 @@
 .appContainer {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(auto, 300px) repeat(2, 1fr);
+
+  & .sideBarContainer {
+    grid-column: 1;
+  }
+
+  & .chatContainer {
+    grid-column: 2 / 4;
+    height: 100vh;
+  }
+
+  @media screen and (max-width: 900px) {
+    & .chatContainer {
+      grid-column: 1 / 4;
+      margin-top: 60px;
+      height: calc(100vh - 60px);
+    }
+  }
 }
 
 .formContainer {
