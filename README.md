@@ -3,10 +3,10 @@
 
 This is a real-time chat application created using [Socket.io](https://socket.io) and [Express.js](https://expressjs.com).
 
-This project is an implementation of the WebSocket technology and the power of the RESTful APIs.
+This project is an implementation of the WebSocket technology with the help of RESTful APIs.
 
 > [!WARNING]
-> This project is not meant to be used on production. It was created just to play around with real-time technology.
+> This project is not meant to be used on production. It was created just to play around with the real-time technology.
 
 ### Which features does it has?
 - Account system that only requires username and password.
