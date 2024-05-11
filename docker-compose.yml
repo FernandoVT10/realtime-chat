@@ -1,0 +1,29 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: dev
+    depends_on:
+     - mongo
+    environment:
+      MONGO_URI: mongodb://mongo:27017/realtime-chat
+    volumes:
+      - ./backend:/app/backend
+      - ./frontend:/app/frontend
+      - /app/node_modules
+
+  mongo:
+    image: mongo
+    volumes:
+      - db-data:/data/db
+
+  nginx:
+    image: nginx:1.25.5-alpine
+    ports:
+      - 3000:80
+    volumes:
+      - ./nginx:/etc/nginx/
+
+volumes:
+  db-data:

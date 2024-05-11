@@ -4,7 +4,7 @@ import { getModelForClass, prop, modelOptions } from "@typegoose/typegoose";
 import { TimeStamps, Base } from "@typegoose/typegoose/lib/defaultClasses";
 import { USER_CONFIG } from "shared/constants";
 
-const AVATARS_URL = "http://localhost:3001/uploads/avatars";
+const AVATARS_URL = "http://localhost:3000/uploads/avatars";
 
 export interface User extends Base {}
 
