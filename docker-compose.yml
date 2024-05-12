@@ -6,9 +6,9 @@ services:
       target: dev
     depends_on:
      - mongo
-    environment:
-      MONGO_URI: mongodb://mongo:27017/realtime-chat
     volumes:
+      - ./uploads:/uploads
+
       - ./backend:/app/backend
       - ./frontend:/app/frontend
       - /app/node_modules
@@ -24,6 +24,7 @@ services:
       - 3000:80
     volumes:
       - ./nginx:/etc/nginx/
+      - ./uploads:/uploads
 
 volumes:
   db-data:
