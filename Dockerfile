@@ -20,9 +20,3 @@ RUN rm -rf frontend
 COPY --from=base /app/node_modules ./node_modules
 
 CMD ["npm", "run", "dev"]
-
-# FROM base as builder
-# WORKDIR /app
-# COPY . .
-# COPY --from=base /app/node_modules .
-# RUN npm run build
