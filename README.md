@@ -8,6 +8,16 @@ This project is an implementation of the WebSocket technology with the help of R
 > [!WARNING]
 > This project is not meant to be used on production. It was created just to play around with the real-time technology.
 
+### How to run it?
+You need to have [Docker](https://docs.docker.com/get-docker) installed first, and then you only have to execute 2 commands at the root of the project to run the app.
+
+```shell
+$ docker compose build
+$ docker compose up
+```
+
+And that's it!
+
 ### Which features does it has?
 - Account system that only requires username and password.
 - Friends requests system. You can send a friend request to another user or accept one sent to you.
